@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+web/dist/
+build-story.html
+*.tsbuildinfo
+
+# Video and screen recordings
+*.mp4
+*.mov
+*.m4v
+*.mkv
+*.webm
+*.avi
+
+# Local and OS files
+.claude/settings.local.json
+.env
+.env.*
+.DS_Store
+*.log

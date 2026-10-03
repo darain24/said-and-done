@@ -1,0 +1,22 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Design tokens: DESIGN.md §2.1. Dark mode redefines the same variables. */
+@theme {
+  --color-canvas: #FAFAF9;  --color-surface: #FFFFFF;  --color-sunken: #F3F2F0;
+  --color-line: #E7E5E4;    --color-ink: #1C1917;      --color-muted: #6B6560;
+  --color-accent: #5B4BC4;  --color-accent-soft: #EEEBFB;
+  --color-add: #1A7F37;     --color-del: #C9252D;
+  --color-warn: #9A6700;    --color-warn-soft: #FFF4D6;
+}
+
+@layer base {
+  .dark {
+    --color-canvas: #0E0E11;  --color-surface: #17171C;  --color-sunken: #121216;
+    --color-line: #2A2A31;    --color-ink: #ECECEF;      --color-muted: #A1A1AA;
+    --color-accent: #A99BFF;  --color-accent-soft: #25213D;
+    --color-add: #3FB950;     --color-del: #F8645A;
+    --color-warn: #E3B341;    --color-warn-soft: #2E2614;
+  }
+  body { @apply bg-canvas text-ink font-sans antialiased; }
+}

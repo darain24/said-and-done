@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project status
 
-Said & Done is a submission for the Wispr Flow shortlisting task (deadline Oct 6, 2026, 11:59 PM). Nothing is scaffolded yet. The specs live in `docs/`. Read the relevant one before starting any piece of work:
+Said & Done is a submission for the Wispr Flow shortlisting task (deadline Oct 6, 2026, 11:59 PM). The scaffold is in place (CLI, web app, build and test scripts); features aren't built yet. The specs live in `docs/`. Read the relevant one before starting any piece of work:
 
 | Doc | Use it for |
 |---|---|
@@ -42,4 +42,24 @@ Full detail in `docs/ARCHITECTURE.md`.
 
 ## Commands
 
-Not defined yet. When the scaffold lands, replace this section with the real build, test, dev, and single-test commands.
+npm workspaces: the root package is the CLI, `web/` is the React app. Run everything from the repo root.
+
+```bash
+npm install                    # once; installs the root and web/ workspace
+npm run build                  # web/ → dist/story-template.html (checked), then tsc → dist/cli.js
+npm test                       # every test/**/*.test.ts with node:test (via tsx)
+npm run dev                    # Vite dev server for web/
+npm run typecheck              # tsc for src/, test/, scripts/ and web/
+node dist/cli.js --help        # run the built CLI
+```
+
+Single test file or test name:
+
+```bash
+node --import tsx --test test/cli.test.ts
+node --import tsx --test --test-name-pattern="version" test/cli.test.ts
+```
+
+- `scripts/build-template.ts` fails the build if the template is missing the `__SAID_STORY__` placeholder (it must appear exactly once), the CSP meta tag, inlined assets or the design tokens, or is over 400 KB.
+- The CSP tag is added by a build-only Vite plugin in `web/vite.config.ts`, so the dev server isn't blocked by it.
+- Never write the literal `__SAID_STORY__` in web source: it would end up in the bundle and break the placeholder check.

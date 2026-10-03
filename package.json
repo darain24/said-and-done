@@ -1,0 +1,29 @@
+{
+  "name": "said-and-done",
+  "version": "0.1.0",
+  "description": "Turn a voice-built repo into a replayable Build Story.",
+  "type": "module",
+  "bin": {
+    "said": "dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "web"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace web && node --import tsx scripts/build-template.ts && tsc -p tsconfig.build.json",
+    "test": "node --import tsx --test \"test/**/*.test.ts\"",
+    "dev": "npm run dev --workspace web",
+    "typecheck": "tsc -p tsconfig.json && npm run typecheck --workspace web"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
