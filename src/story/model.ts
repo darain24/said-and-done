@@ -1,7 +1,6 @@
 // The Story document (ARCHITECTURE §7). assemble.ts is the only place one is
 // built; `said scan --json` prints it and `said build` injects it into the page.
-import type { ParseDiagnostics } from "../sessions/parse.js";
-import type { LinkConfidence } from "./correlate.js";
+// No imports: the web app imports these types too.
 
 export interface Story {
   schemaVersion: 1;
@@ -49,6 +48,8 @@ export interface Prompt {
   source?: string;
 }
 
+export type LinkConfidence = "files" | "time" | "none";
+
 export interface Commit {
   sha: string;
   at: string;
@@ -71,4 +72,21 @@ export interface Stats {
   longestPrompt: { n: number; words: number } | null;
   /** Estimate: typing at 40 wpm vs speaking at 150 wpm (PRD §8). */
   typingSavedMs: number;
+}
+
+/** Every parser count (src/sessions/parse.ts). */
+export interface ParseDiagnostics {
+  files: number;
+  lines: number;
+  malformed: number;
+  ignoredByType: Record<string, number>;
+  sidechain: number;
+  outOfRepo: number;
+  meta: number;
+  toolResults: number;
+  wrappers: number;
+  empty: number;
+  duplicatePrompts: number;
+  touchesOutsideRepo: number;
+  touchesWithoutPrompt: number;
 }

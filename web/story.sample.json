@@ -1,0 +1,275 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-04T15:00:00.000Z",
+  "generator": {
+    "name": "said-and-done",
+    "version": "0.1.0"
+  },
+  "repo": {
+    "name": "said-and-done",
+    "remoteUrl": "https://github.com/darain24/said-and-done"
+  },
+  "title": "Said & Done",
+  "redacted": true,
+  "filters": {
+    "excludedSessions": []
+  },
+  "sessions": [
+    {
+      "id": "3f2a9c1e-5b7d-4e8a-9c0f-1a2b3c4d5e6f",
+      "start": "2026-10-03T10:02:00.000Z",
+      "end": "2026-10-03T10:45:00.000Z",
+      "promptCount": 5
+    },
+    {
+      "id": "8d4e2b6a-1c3f-4a5b-8e9d-0f1a2b3c4d5e",
+      "start": "2026-10-04T14:02:00.000Z",
+      "end": "2026-10-04T14:40:00.000Z",
+      "promptCount": 3
+    }
+  ],
+  "prompts": [
+    {
+      "n": 1,
+      "id": "sample-1",
+      "sessionId": "3f2a9c1e-5b7d-4e8a-9c0f-1a2b3c4d5e6f",
+      "at": "2026-10-03T10:02:00.000Z",
+      "text": "Read the CLAUDE.md and the docs folder and tell me in three lines what we're building and how.",
+      "words": 18,
+      "files": [],
+      "commitSha": "a1b2c3d5f64e5f64e5f64e5f64e5f64e5f64e5f6"
+    },
+    {
+      "n": 2,
+      "id": "sample-2",
+      "sessionId": "3f2a9c1e-5b7d-4e8a-9c0f-1a2b3c4d5e6f",
+      "at": "2026-10-03T10:05:00.000Z",
+      "text": "Set up the repo. A TypeScript CLI in src with zero runtime dependencies, tested with node:test, and a Vite plus React app in web that builds into one HTML file.\n\nUse npm workspaces so everything runs from the root. Add Tailwind v4 with the design tokens from the design doc, both light and dark. The build should fail if the template is missing the story placeholder or the content security policy tag, or if it's over 400 kilobytes.\n\nAdd a typecheck script that covers src, test, scripts and web. Then run everything once and tell me what you set up.",
+      "words": 100,
+      "files": [
+        "package.json",
+        "tsconfig.json",
+        "src/cli.ts",
+        "web/package.json",
+        "web/vite.config.ts",
+        "web/src/App.tsx",
+        "web/src/index.css",
+        "scripts/build-template.ts"
+      ],
+      "commitSha": "a1b2c3d5f64e5f64e5f64e5f64e5f64e5f64e5f6"
+    },
+    {
+      "n": 3,
+      "id": "sample-3",
+      "sessionId": "3f2a9c1e-5b7d-4e8a-9c0f-1a2b3c4d5e6f",
+      "at": "2026-10-03T10:20:00.000Z",
+      "text": "Run the build and fix anything that fails.",
+      "words": 8,
+      "files": [
+        "package.json"
+      ],
+      "commitSha": "a1b2c3d5f64e5f64e5f64e5f64e5f64e5f64e5f6"
+    },
+    {
+      "n": 4,
+      "id": "sample-4",
+      "sessionId": "3f2a9c1e-5b7d-4e8a-9c0f-1a2b3c4d5e6f",
+      "at": "2026-10-03T10:38:00.000Z",
+      "text": "Add redaction for API keys, emails and home paths. A prompt that mentions [redacted:email] or a key like [redacted:key] should keep its shape with a typed placeholder.",
+      "words": 25,
+      "files": [
+        "src/redact.ts",
+        "test/redact.test.ts"
+      ],
+      "commitSha": "b7e41f08b79a8b79a8b79a8b79a8b79a8b79a8b7"
+    },
+    {
+      "n": 5,
+      "id": "sample-5",
+      "sessionId": "3f2a9c1e-5b7d-4e8a-9c0f-1a2b3c4d5e6f",
+      "at": "2026-10-03T10:45:00.000Z",
+      "text": "Also make sure git shas and UUIDs are never redacted.",
+      "words": 10,
+      "files": [
+        "test/redact.test.ts"
+      ],
+      "commitSha": "b7e41f08b79a8b79a8b79a8b79a8b79a8b79a8b7"
+    },
+    {
+      "n": 6,
+      "id": "sample-6",
+      "sessionId": "8d4e2b6a-1c3f-4a5b-8e9d-0f1a2b3c4d5e",
+      "at": "2026-10-04T14:02:00.000Z",
+      "text": "Now the session parser. Read the JSONL files line by line, keep only the human prompts, and count everything you skip.",
+      "words": 21,
+      "files": [],
+      "commitSha": "d5a6f817d86c7d86c7d86c7d86c7d86c7d86c7d8"
+    },
+    {
+      "n": 7,
+      "id": "sample-7",
+      "sessionId": "8d4e2b6a-1c3f-4a5b-8e9d-0f1a2b3c4d5e",
+      "at": "2026-10-04T14:20:00.000Z",
+      "text": "Add a test where a prompt contains a closing script tag and check it can't break the page.",
+      "words": 18,
+      "files": [],
+      "commitSha": "d5a6f817d86c7d86c7d86c7d86c7d86c7d86c7d8"
+    },
+    {
+      "n": 8,
+      "id": "sample-8",
+      "sessionId": "8d4e2b6a-1c3f-4a5b-8e9d-0f1a2b3c4d5e",
+      "at": "2026-10-04T14:40:00.000Z",
+      "text": "Commit this, then let's look at the UI.",
+      "words": 8,
+      "files": [],
+      "commitSha": null
+    }
+  ],
+  "commits": [
+    {
+      "sha": "a1b2c3d5f64e5f64e5f64e5f64e5f64e5f64e5f6",
+      "at": "2026-10-03T10:31:00.000Z",
+      "subject": "Scaffold the CLI and the web app",
+      "files": [
+        {
+          "path": "package.json",
+          "added": 32,
+          "removed": 0
+        },
+        {
+          "path": "tsconfig.json",
+          "added": 18,
+          "removed": 0
+        },
+        {
+          "path": "src/cli.ts",
+          "added": 96,
+          "removed": 0
+        },
+        {
+          "path": "web/package.json",
+          "added": 26,
+          "removed": 0
+        },
+        {
+          "path": "web/vite.config.ts",
+          "added": 24,
+          "removed": 0
+        },
+        {
+          "path": "web/src/App.tsx",
+          "added": 9,
+          "removed": 0
+        },
+        {
+          "path": "scripts/build-template.ts",
+          "added": 207,
+          "removed": 0
+        }
+      ],
+      "added": 412,
+      "removed": 0,
+      "promptNs": [
+        1,
+        2,
+        3
+      ],
+      "confidence": "files"
+    },
+    {
+      "sha": "b7e41f08b79a8b79a8b79a8b79a8b79a8b79a8b7",
+      "at": "2026-10-03T10:49:00.000Z",
+      "subject": "FR-20: add redaction for keys, secrets, emails and home paths",
+      "files": [
+        {
+          "path": "src/redact.ts",
+          "added": 112,
+          "removed": 3
+        },
+        {
+          "path": "test/redact.test.ts",
+          "added": 74,
+          "removed": 0
+        }
+      ],
+      "added": 186,
+      "removed": 3,
+      "promptNs": [
+        4,
+        5
+      ],
+      "confidence": "files"
+    },
+    {
+      "sha": "c03d9e22e31f2e31f2e31f2e31f2e31f2e31f2e3",
+      "at": "2026-10-04T09:12:00.000Z",
+      "subject": "Fix a typo in the README",
+      "files": [
+        {
+          "path": "README.md",
+          "added": 1,
+          "removed": 1
+        }
+      ],
+      "added": 1,
+      "removed": 1,
+      "promptNs": [],
+      "confidence": "none"
+    },
+    {
+      "sha": "d5a6f817d86c7d86c7d86c7d86c7d86c7d86c7d8",
+      "at": "2026-10-04T14:31:00.000Z",
+      "subject": "FR-2: session parser with skip counts",
+      "files": [
+        {
+          "path": "src/sessions/locate.ts",
+          "added": 88,
+          "removed": 12
+        },
+        {
+          "path": "src/cli.ts",
+          "added": 152,
+          "removed": 40
+        }
+      ],
+      "added": 240,
+      "removed": 52,
+      "promptNs": [
+        6,
+        7
+      ],
+      "confidence": "time"
+    }
+  ],
+  "stats": {
+    "prompts": 8,
+    "words": 208,
+    "sessions": 2,
+    "commits": 4,
+    "filesTouched": 10,
+    "activeMs": 4860000,
+    "firstPromptToFirstCommitMs": 1740000,
+    "longestPrompt": {
+      "n": 2,
+      "words": 100
+    },
+    "typingSavedMs": 228800
+  },
+  "diagnostics": {
+    "files": 2,
+    "lines": 412,
+    "malformed": 0,
+    "ignoredByType": {},
+    "sidechain": 0,
+    "outOfRepo": 0,
+    "meta": 0,
+    "toolResults": 120,
+    "wrappers": 6,
+    "empty": 0,
+    "duplicatePrompts": 0,
+    "touchesOutsideRepo": 0,
+    "touchesWithoutPrompt": 0,
+    "excludedByFilter": 0
+  }
+}

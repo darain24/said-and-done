@@ -5,6 +5,9 @@ import { createReadStream } from "node:fs";
 import { homedir } from "node:os";
 import { isAbsolute, relative, resolve, sep } from "node:path";
 import { createInterface } from "node:readline";
+import type { ParseDiagnostics } from "../story/model.js";
+
+export type { ParseDiagnostics };
 
 export interface RawPrompt {
   /** promptId, or uuid when there's no promptId. The dedupe key. */
@@ -27,21 +30,6 @@ export interface FileTouch {
   tool: string;
 }
 
-export interface ParseDiagnostics {
-  files: number;
-  lines: number;
-  malformed: number;
-  ignoredByType: Record<string, number>;
-  sidechain: number;
-  outOfRepo: number;
-  meta: number;
-  toolResults: number;
-  wrappers: number;
-  empty: number;
-  duplicatePrompts: number;
-  touchesOutsideRepo: number;
-  touchesWithoutPrompt: number;
-}
 
 export interface ParseResult {
   prompts: RawPrompt[];

@@ -8,8 +8,9 @@
 //   none   no prompts led to this commit (e.g. made before recording)
 // Prompts after the last commit stay uncommitted.
 import type { GitCommit } from "../git/log.js";
+import type { LinkConfidence } from "./model.js";
 
-export type LinkConfidence = "files" | "time" | "none";
+export type { LinkConfidence };
 
 export interface LinkedCommit extends GitCommit {
   promptIds: string[];
