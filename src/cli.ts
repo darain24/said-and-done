@@ -5,6 +5,7 @@ import { parseArgs } from "node:util";
 import { BADGE_HELP, badge } from "./commands/badge.js";
 import { BUILD_HELP, build } from "./commands/build.js";
 import { CHAPTERS_HELP, chapters } from "./commands/chapters.js";
+import { HOOK_HELP, hook } from "./commands/hook.js";
 import { UsageError } from "./commands/options.js";
 import { SCAN_HELP, scan } from "./commands/scan.js";
 import { EXIT } from "./exit.js";
@@ -20,8 +21,8 @@ const COMMANDS = {
   build: { run: build, help: BUILD_HELP },
   chapters: { run: chapters, help: CHAPTERS_HELP },
   badge: { run: badge, help: BADGE_HELP },
+  hook: { run: hook, help: HOOK_HELP },
 } as const;
-const PLANNED = ["hook"];
 
 const HELP = `said — turn a voice-built repo into a replayable Build Story
 
@@ -92,11 +93,6 @@ export async function run(argv: string[], io: Io): Promise<number> {
       }
       throw error;
     }
-  }
-
-  if (PLANNED.includes(command)) {
-    io.err(`"said ${command}" isn't built yet.`);
-    return EXIT.usage;
   }
 
   io.err(`Unknown command "${command}".\nRun "said --help" to see the commands.`);
