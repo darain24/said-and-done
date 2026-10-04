@@ -2,6 +2,7 @@
 import { realpathSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
+import { BADGE_HELP, badge } from "./commands/badge.js";
 import { BUILD_HELP, build } from "./commands/build.js";
 import { CHAPTERS_HELP, chapters } from "./commands/chapters.js";
 import { UsageError } from "./commands/options.js";
@@ -18,8 +19,9 @@ const COMMANDS = {
   scan: { run: scan, help: SCAN_HELP },
   build: { run: build, help: BUILD_HELP },
   chapters: { run: chapters, help: CHAPTERS_HELP },
+  badge: { run: badge, help: BADGE_HELP },
 } as const;
-const PLANNED = ["badge", "hook"];
+const PLANNED = ["hook"];
 
 const HELP = `said — turn a voice-built repo into a replayable Build Story
 
@@ -29,7 +31,7 @@ Commands:
   scan        Summarise the sessions and commits found for this repo
   build       Write build-story.html
   chapters    Print YouTube chapter markers
-  badge       Print a "built by voice" README badge
+  badge       Write a "built by voice" README badge
   hook        Install or remove the prompt ledger hook
 
 Options:
