@@ -3,6 +3,7 @@ import { realpathSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 import { BUILD_HELP, build } from "./commands/build.js";
+import { CHAPTERS_HELP, chapters } from "./commands/chapters.js";
 import { UsageError } from "./commands/options.js";
 import { SCAN_HELP, scan } from "./commands/scan.js";
 import { EXIT } from "./exit.js";
@@ -16,8 +17,9 @@ export { EXIT } from "./exit.js";
 const COMMANDS = {
   scan: { run: scan, help: SCAN_HELP },
   build: { run: build, help: BUILD_HELP },
+  chapters: { run: chapters, help: CHAPTERS_HELP },
 } as const;
-const PLANNED = ["chapters", "badge", "hook"];
+const PLANNED = ["badge", "hook"];
 
 const HELP = `said — turn a voice-built repo into a replayable Build Story
 
