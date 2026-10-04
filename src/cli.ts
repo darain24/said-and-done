@@ -2,9 +2,12 @@
 import { realpathSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
-import { SCAN_HELP, scan, UsageError } from "./commands/scan.js";
+import { BUILD_HELP, build } from "./commands/build.js";
+import { UsageError } from "./commands/options.js";
+import { SCAN_HELP, scan } from "./commands/scan.js";
 import { EXIT } from "./exit.js";
 import { GitError } from "./git/log.js";
+import { TemplateError } from "./render/inject.js";
 import { NoSessionsError } from "./sessions/locate.js";
 import { version } from "./version.js";
 
@@ -12,8 +15,9 @@ export { EXIT } from "./exit.js";
 
 const COMMANDS = {
   scan: { run: scan, help: SCAN_HELP },
+  build: { run: build, help: BUILD_HELP },
 } as const;
-const PLANNED = ["build", "chapters", "badge", "hook"];
+const PLANNED = ["chapters", "badge", "hook"];
 
 const HELP = `said — turn a voice-built repo into a replayable Build Story
 
@@ -77,6 +81,10 @@ export async function run(argv: string[], io: Io): Promise<number> {
       if (error instanceof GitError) {
         io.err(error.message);
         return EXIT.git;
+      }
+      if (error instanceof TemplateError) {
+        io.err(error.message);
+        return EXIT.template;
       }
       throw error;
     }

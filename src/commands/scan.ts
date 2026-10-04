@@ -7,17 +7,14 @@ import type { RedactionHits } from "../redact.js";
 import type { LocatedSessions } from "../sessions/locate.js";
 import { buildStoryFromRepo } from "../story/assemble.js";
 import type { Story } from "../story/model.js";
+import { readFilters, STORY_OPTIONS, STORY_OPTIONS_HELP } from "./options.js";
 
 export const SCAN_HELP = `Usage: said scan [options]
 
 Summarise the Claude Code sessions and git commits found for this repo.
 
 Options:
-  --repo <path>              Repo to scan (default: the current directory)
-  --sessions-dir <path>      Read session files from this folder instead
-  --since <ISO date>         Leave out prompts before this time
-  --until <ISO date>         Leave out prompts after this time
-  --exclude-session <id>     Leave out a session; repeatable, an id prefix is enough
+${STORY_OPTIONS_HELP}
   --json                     Print the story JSON instead of the summary
   -h, --help                 Show this help
 
@@ -27,47 +24,22 @@ Example:
 export async function scan(argv: string[], io: Io): Promise<number> {
   const { values } = parseArgs({
     args: argv,
-    options: {
-      repo: { type: "string" },
-      "sessions-dir": { type: "string" },
-      since: { type: "string" },
-      until: { type: "string" },
-      "exclude-session": { type: "string", multiple: true },
-      json: { type: "boolean" },
-      help: { type: "boolean", short: "h" },
-    },
+    options: { ...STORY_OPTIONS, json: { type: "boolean" } },
   });
   if (values.help) {
     io.out(SCAN_HELP);
     return EXIT.ok;
   }
 
-  const since = parseDate(values.since, "--since");
-  const until = parseDate(values.until, "--until");
-  const filters = {
-    ...(since ? { since } : {}),
-    ...(until ? { until } : {}),
-    excludedSessions: values["exclude-session"] ?? [],
-  };
-
   const { story, redactionHits, located } = await buildStoryFromRepo({
     repo: values.repo,
     sessionsDir: values["sessions-dir"],
-    filters,
+    filters: readFilters(values),
     redact: true,
   });
 
   io.out(values.json ? JSON.stringify(story, null, 2) : formatScan(story, located, redactionHits).join("\n"));
   return EXIT.ok;
-}
-
-export class UsageError extends Error {}
-
-function parseDate(value: string | undefined, flag: string): string | undefined {
-  if (value === undefined) return undefined;
-  const ms = Date.parse(value);
-  if (Number.isNaN(ms)) throw new UsageError(`${flag} needs a date like 2026-10-03 or 2026-10-03T06:00:00Z, not "${value}".`);
-  return new Date(ms).toISOString();
 }
 
 const row = (label: string, value: string, note = "") => `  ${label.padEnd(30)}${value.padStart(7)}${note ? `   ${note}` : ""}`;
