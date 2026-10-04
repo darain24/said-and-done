@@ -20,4 +20,6 @@ function contentSecurityPolicy(): Plugin {
 
 export default defineConfig({
   plugins: [react(), tailwindcss(), viteSingleFile(), contentSecurityPolicy()],
+  // The preview pane assigns a free port through PORT; Vite doesn't read it by itself.
+  server: { port: Number(process.env.PORT) || 5173 },
 });
