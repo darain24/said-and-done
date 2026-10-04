@@ -110,6 +110,7 @@ test("FR-5: odd and excluded entries are counted, never thrown", () => {
     user("a later prompt", { cwd: "/work/app/web/src", promptId: "p2" }),
     edit("lib/util.ts", { cwd: "/work/app/web" }), // relative to the entry's cwd
     edit("/etc/hosts"),
+    user('<pasted_content id="6eb9">\nDescribe the UI:\n* A header\n</pasted_content id="6eb9">', { promptId: "p3" }),
     "",
   ]) parser.line(line);
   const { prompts, touches, diagnostics: d } = parser.finish();
@@ -117,11 +118,12 @@ test("FR-5: odd and excluded entries are counted, never thrown", () => {
   assert.deepEqual(prompts.map((p) => [p.id, p.text, p.images]), [
     ["p1", "Look at this  screenshot", 1],
     ["p2", "a later prompt", 0],
+    ["p3", "Describe the UI:\n* A header", 0],
   ]);
   assert.deepEqual(touches.map((t) => [t.promptId, t.path]), [["p2", "web/lib/util.ts"]]);
   assert.deepEqual(
     { lines: d.lines, malformed: d.malformed, sidechain: d.sidechain, outOfRepo: d.outOfRepo, wrappers: d.wrappers, empty: d.empty },
-    { lines: 14, malformed: 2, sidechain: 1, outOfRepo: 2, wrappers: 2, empty: 1 },
+    { lines: 15, malformed: 2, sidechain: 1, outOfRepo: 2, wrappers: 2, empty: 1 },
   );
   assert.deepEqual(d.ignoredByType, { "mystery-type": 1 });
   assert.equal(d.touchesWithoutPrompt, 1);

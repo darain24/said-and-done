@@ -51,6 +51,9 @@ export const WRAPPER_PREFIXES = [
 
 const EDIT_TOOLS = new Set(["Edit", "Write", "MultiEdit", "NotebookEdit"]);
 const SYSTEM_REMINDER = /<system-reminder>[\s\S]*?<\/system-reminder>/g;
+// The desktop app wraps pasted (or dictated-then-pasted) text in these tags.
+// The text inside is the prompt; only the tags go.
+const PASTE_TAG = /<\/?pasted_content(?:\s+id="[^"]*")?\s*>/g;
 
 type Entry = Record<string, unknown>;
 const isRecord = (value: unknown): value is Entry => typeof value === "object" && value !== null && !Array.isArray(value);
@@ -152,7 +155,7 @@ export function createParser(repoRoot: string) {
       d.wrappers++;
       return;
     }
-    const clean = trimmed.replace(SYSTEM_REMINDER, "").trim();
+    const clean = trimmed.replace(SYSTEM_REMINDER, "").replace(PASTE_TAG, "").trim();
     if (clean === "") {
       d.empty++;
       return;
