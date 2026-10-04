@@ -38,7 +38,7 @@ export function Timeline({ story }: { story: Story }) {
           <h2 className="mb-4 text-[15px] font-semibold tracking-wide text-muted uppercase">{heading(group)}</h2>
           <div className="relative">
             <span aria-hidden="true" className="absolute inset-y-0 left-3 w-px bg-line md:left-4" />
-            <ol className="flex flex-col gap-4">
+            <ol className="flex flex-col gap-6 md:gap-8">
               {group.items.map((item, j) =>
                 item.kind === "prompt" ? (
                   <PromptCard key={item.prompt.id} prompt={item.prompt} showDay={startsNewDay(group, j)} />

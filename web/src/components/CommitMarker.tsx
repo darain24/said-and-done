@@ -42,8 +42,8 @@ export function CommitMarker({ commit, remoteUrl }: { commit: Commit; remoteUrl?
 
   return (
     <li className="relative pl-9 md:pl-12">
-      <span aria-hidden="true" className="absolute top-2.5 left-3 size-3 -translate-x-1/2 rotate-45 bg-ink md:left-4" />
-      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 py-1">
+      <span aria-hidden="true" className="absolute top-3.5 left-3 size-3 -translate-x-1/2 rotate-45 bg-ink md:left-4" />
+      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 py-2">
         {url ? (
           <a
             href={url}

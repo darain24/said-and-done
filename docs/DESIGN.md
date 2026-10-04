@@ -53,12 +53,13 @@ System stacks only (Tailwind v4 defaults): `font-sans` (system-ui …) and `font
 
 | Role | Size / line height | Weight | Classes |
 |---|---|---|---|
-| Stat number | 40/44 desktop, 32/36 mobile | 600 | `text-4xl md:text-[40px] font-semibold tabular-nums tracking-tight` |
+| Stat number | 28% of the tile width, capped at 72 from `md` and 40 on mobile; line height 1 | 600 | `text-[length:min(28cqi,40px)] md:text-[length:min(28cqi,72px)] leading-none font-semibold tabular-nums tracking-tight whitespace-nowrap` (tile is `@container`) |
 | Page title | 28/34 | 650 | `text-[28px] leading-tight font-semibold tracking-tight` |
 | Section / session header | 15/20, uppercase | 600 | `text-[15px] font-semibold uppercase tracking-wide text-muted` |
 | **Prompt text** | 18/29 desktop, 17/27 mobile | 400 | `text-[17px] md:text-lg leading-relaxed text-ink` |
 | Body | 16/24 | 400 | `text-base` |
 | Meta / labels | 14/20 | 500 | `text-sm font-medium text-muted` |
+| Card timestamp and word count | 13/20 | 400 | `text-[13px] text-muted tabular-nums` |
 | Code, sha, paths | 13/20 | 450 | `font-mono text-[13px]` |
 
 Numbers in stats, times and diff counts always use `tabular-nums`.
@@ -68,7 +69,7 @@ Numbers in stats, times and diff counts always use `tabular-nums`.
 - 4 px base grid. Use Tailwind's spacing scale; no arbitrary pixel values for spacing.
 - Content width: the timeline column is `max-w-3xl` (768 px), centred. The header and stats can widen to `max-w-5xl`.
 - Page gutters: `px-4` (16 px) on mobile, `px-6` from `md`.
-- Card padding: `p-5 md:p-6`. Gap between cards: `gap-4`. Between sessions: `mt-12`.
+- Card padding: `p-6 md:p-8`. Gap between cards: `gap-6 md:gap-8`. Between sessions: `mt-12`.
 - Radius: cards and tiles `rounded-xl` (12 px); chips and buttons `rounded-md`; pills `rounded-full`.
 - Borders before shadows: cards are `border border-line`. One shadow only: `shadow-sm`, on the sticky replay bar.
 - Touch targets at least 44×44 px.
@@ -112,10 +113,14 @@ Numbers in stats, times and diff counts always use `tabular-nums`.
 │  darain24/said-and-done · Oct 3 – Oct 5, 2026                        │
 ├──────────────────────────────────────────────────────────────────────┤
 │ STATS (max-w-5xl)                                                    │
-│ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐                  │
-│ │   142    │ │  9,814   │ │    37    │ │  6h 12m  │                  │
-│ │ prompts  │ │  words   │ │ commits  │ │ active   │                  │
-│ └──────────┘ └──────────┘ └──────────┘ └──────────┘                  │
+│ ┌───────────────────────────────┐ ┌───────────────────────────────┐  │
+│ │ 142                           │ │ 9,814                         │  │
+│ │ prompts                       │ │ words                         │  │
+│ └───────────────────────────────┘ └───────────────────────────────┘  │
+│ ┌───────────────────────────────┐ ┌───────────────────────────────┐  │
+│ │ 37                            │ │ 6h 12m                        │  │
+│ │ commits                       │ │ active                        │  │
+│ └───────────────────────────────┘ └───────────────────────────────┘  │
 │  First prompt → first commit 14m · Longest prompt 312 words ·        │
 │  ≈ 3h 20m typing saved (estimate ⓘ)                                 │
 ├──────────────────────────────────────────────────────────────────────┤
@@ -158,7 +163,9 @@ Each lists its anatomy, states and a class sketch. Class strings must be written
 
 ### 4.1 `StatTile`
 - Anatomy: number (top), label (bottom), optional ⓘ tooltip button.
-- `rounded-xl bg-sunken p-4 md:p-5` · number `text-4xl md:text-[40px] font-semibold tabular-nums` · label `text-sm font-medium text-muted`.
+- `@container rounded-xl bg-sunken p-4 md:p-6`, `gap-2` between number and label · number as in the Stat number row of §2.2 · label `text-sm md:text-base font-medium text-muted`.
+- Tiles sit in a 2×2 grid at every width (`grid-cols-2 gap-3 md:gap-4`), so the numbers can be large; four across leaves too little room.
+- Duration units (`h`, `m`, `s`) are `text-[0.6em]`, so "10h 45m" fits the tile.
 - During replay, the number counts up to the current total (400 ms).
 
 ### 4.2 `SessionHeader`
@@ -166,10 +173,10 @@ Each lists its anatomy, states and a class sketch. Class strings must be written
 
 ### 4.3 `PromptCard` — the main component
 - Anatomy:
-  1. Meta row: number pill `#12` (`rounded-full bg-accent-soft text-accent text-sm font-semibold px-2.5`) · time · word count (`text-sm text-muted tabular-nums`).
+  1. Meta row: number pill `#12` (`rounded-full bg-accent-soft text-accent text-sm font-semibold px-2.5`) · time · word count (`text-[13px] text-muted tabular-nums`, smaller than the pill so the words lead).
   2. Prompt text: a large accent opening quote mark (`text-accent`) with the text in prompt style. Keep the user's words exactly as they are; just preserve line breaks (`whitespace-pre-wrap`).
   3. File chips row (optional).
-- Container: `relative rounded-xl border border-line bg-surface p-5 md:p-6`.
+- Container: `relative rounded-xl border border-line bg-surface p-6 md:p-8`. Meta row to text `mt-4`; text to file chips `mt-5`.
 - States:
   - **Default.**
   - **Collapsed long prompt:** over 6 lines, clamp it (`line-clamp-6`) and show a text button "Show full prompt" / "Show less" (`text-sm font-medium text-accent`, with `aria-expanded`).

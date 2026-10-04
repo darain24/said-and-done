@@ -25,7 +25,7 @@ function FileChips({ files }: { files: string[] }) {
   const hidden = files.length - shown.length;
 
   return (
-    <ul aria-label="Files touched" className="mt-4 flex flex-wrap gap-2">
+    <ul aria-label="Files touched" className="mt-5 flex flex-wrap gap-2">
       {shown.map((path) => (
         <li key={path} title={path} className="max-w-full truncate rounded-md bg-sunken px-2 py-0.5 font-mono text-[13px] text-ink">
           <span aria-hidden="true">{fileName(path)}</span>
@@ -66,10 +66,10 @@ export function PromptCard({ prompt, showDay = false }: { prompt: Prompt; showDa
 
   return (
     <li id={`prompt-${prompt.n}`} className="relative scroll-mt-6 pl-9 md:pl-12">
-      <span aria-hidden="true" className="absolute top-7 left-3 size-3 -translate-x-1/2 rounded-full bg-accent ring-4 ring-canvas md:left-4" />
-      <article aria-label={`Prompt ${prompt.n}`} className="rounded-xl border border-line bg-surface p-5 md:p-6">
-        <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted tabular-nums">
-          <span className="rounded-full bg-accent-soft px-2.5 font-semibold text-accent">#{prompt.n}</span>
+      <span aria-hidden="true" className="absolute top-7 left-3 size-3 -translate-x-1/2 rounded-full md:top-9 bg-accent ring-4 ring-canvas md:left-4" />
+      <article aria-label={`Prompt ${prompt.n}`} className="rounded-xl border border-line bg-surface p-6 md:p-8">
+        <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-muted tabular-nums">
+          <span className="rounded-full bg-accent-soft px-2.5 text-sm font-semibold text-accent">#{prompt.n}</span>
           <span aria-hidden="true">·</span>
           <time dateTime={prompt.at}>{showDay ? `${formatDay(prompt.at)} ${formatClock(prompt.at)}` : formatClock(prompt.at)}</time>
           <span aria-hidden="true">·</span>
@@ -82,7 +82,7 @@ export function PromptCard({ prompt, showDay = false }: { prompt: Prompt; showDa
           )}
         </p>
 
-        <blockquote className="mt-3 flex gap-2">
+        <blockquote className="mt-4 flex gap-2">
           <span aria-hidden="true" className="-mt-1 text-[28px] leading-9 font-semibold text-accent select-none">
             “
           </span>

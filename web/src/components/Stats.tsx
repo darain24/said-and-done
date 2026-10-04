@@ -3,11 +3,27 @@ import type { ReactNode } from "react";
 import type { Stats as StoryStats } from "../../../src/story/model";
 import { formatCount, formatDuration, plural } from "../lib/format";
 
-function StatTile({ value, label }: { value: string; label: string }) {
+/** "1h 25m" with small unit letters, so long durations still fit the tile. */
+function withSmallUnits(value: string): ReactNode {
+  return value.split(/([hms])/).map((part, i) =>
+    i % 2 === 1 ? (
+      <span key={i} className="text-[0.6em]">
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
+}
+
+// The number scales with the tile (cqi), capped at 40px on phones and 72px from md.
+function StatTile({ value, label }: { value: ReactNode; label: string }) {
   return (
-    <div className="flex flex-col-reverse rounded-xl bg-sunken p-4 md:p-5">
-      <dt className="text-sm font-medium text-muted">{label}</dt>
-      <dd className="text-[32px] leading-9 font-semibold tracking-tight tabular-nums md:text-[40px] md:leading-11">{value}</dd>
+    <div className="@container flex flex-col-reverse gap-2 rounded-xl bg-sunken p-4 md:p-6">
+      <dt className="text-sm font-medium text-muted md:text-base">{label}</dt>
+      <dd className="text-[length:min(28cqi,40px)] leading-none font-semibold tracking-tight whitespace-nowrap tabular-nums md:text-[length:min(28cqi,72px)]">
+        {value}
+      </dd>
     </div>
   );
 }
@@ -20,13 +36,13 @@ export function Stats({ stats }: { stats: StoryStats }) {
       <h2 id="stats-heading" className="sr-only">
         Totals
       </h2>
-      <dl className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+      <dl className="grid grid-cols-2 gap-3 md:gap-4">
         <StatTile value={formatCount(stats.prompts)} label={stats.prompts === 1 ? "prompt" : "prompts"} />
         <StatTile value={formatCount(stats.words)} label={stats.words === 1 ? "word" : "words"} />
         <StatTile value={formatCount(stats.commits)} label={stats.commits === 1 ? "commit" : "commits"} />
-        <StatTile value={formatDuration(stats.activeMs)} label="active" />
+        <StatTile value={withSmallUnits(formatDuration(stats.activeMs))} label="active" />
       </dl>
-      <ul className="mt-4 flex flex-col gap-1 text-sm text-muted md:flex-row md:flex-wrap md:gap-x-6">
+      <ul className="mt-5 flex flex-col gap-1 text-sm text-muted md:flex-row md:flex-wrap md:gap-x-6">
         <li>
           First prompt → first commit{" "}
           <Value>{stats.firstPromptToFirstCommitMs === null ? "—" : formatDuration(stats.firstPromptToFirstCommitMs)}</Value>
