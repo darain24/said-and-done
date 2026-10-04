@@ -2,6 +2,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import type { Prompt } from "../../../src/story/model";
 import { fileName, formatClock, formatDay, plural } from "../lib/format";
+import { REVEAL_CLASS } from "../lib/replay";
 import { useMediaQuery } from "../lib/useMediaQuery";
 
 const REDACTED = /(\[redacted:[a-z]+\])/;
@@ -48,7 +49,19 @@ function FileChips({ files }: { files: string[] }) {
   );
 }
 
-export function PromptCard({ prompt, showDay = false }: { prompt: Prompt; showDay?: boolean }) {
+const CARD = {
+  default: "rounded-xl border border-line bg-surface p-6 md:p-8",
+  current: "rounded-xl border border-line bg-accent-soft/40 p-6 ring-2 ring-accent md:p-8",
+} as const;
+
+interface PromptCardProps {
+  prompt: Prompt;
+  showDay?: boolean;
+  /** In replay: the card animates in, and the newest one is highlighted. */
+  replay?: { current: boolean };
+}
+
+export function PromptCard({ prompt, showDay = false, replay }: PromptCardProps) {
   const textRef = useRef<HTMLParagraphElement>(null);
   const [expanded, setExpanded] = useState(false);
   const [overflows, setOverflows] = useState(false);
@@ -65,9 +78,9 @@ export function PromptCard({ prompt, showDay = false }: { prompt: Prompt; showDa
   }, [expanded, prompt.text]);
 
   return (
-    <li id={`prompt-${prompt.n}`} className="relative scroll-mt-6 pl-9 md:pl-12">
+    <li id={`prompt-${prompt.n}`} className={replay ? `relative scroll-mt-6 pl-9 md:pl-12 ${REVEAL_CLASS}` : "relative scroll-mt-6 pl-9 md:pl-12"}>
       <span aria-hidden="true" className="absolute top-7 left-3 size-3 -translate-x-1/2 rounded-full md:top-9 bg-accent ring-4 ring-canvas md:left-4" />
-      <article aria-label={`Prompt ${prompt.n}`} className="rounded-xl border border-line bg-surface p-6 md:p-8">
+      <article aria-label={`Prompt ${prompt.n}`} aria-current={replay?.current ? "step" : undefined} className={replay?.current ? CARD.current : CARD.default}>
         <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-muted tabular-nums">
           <span className="rounded-full bg-accent-soft px-2.5 text-sm font-semibold text-accent">#{prompt.n}</span>
           <span aria-hidden="true">·</span>

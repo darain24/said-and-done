@@ -1,7 +1,8 @@
-// Timeline (FR-42, DESIGN §3, §4.2): grouped by session, in time order, on one rail.
+// Timeline (FR-42, FR-47, DESIGN §3, §4.2): grouped by session, in time order, on one rail.
+import { useMemo } from "react";
 import type { Story } from "../../../src/story/model";
 import { formatClock, formatDay, plural } from "../lib/format";
-import { buildTimeline, type TimelineGroup } from "../lib/timeline";
+import { buildTimeline, type TimelineGroup, type TimelineItem } from "../lib/timeline";
 import { CommitMarker } from "./CommitMarker";
 import { PromptCard } from "./PromptCard";
 
@@ -30,20 +31,35 @@ function startsNewDay(group: TimelineGroup, index: number): boolean {
   return before !== undefined && before !== day(index);
 }
 
-export function Timeline({ story }: { story: Story }) {
+const isRevealed = (item: TimelineItem, revealed: number) => (item.kind === "prompt" ? item.prompt.n : item.after) <= revealed;
+
+/**
+ * `revealed` is set during replay: the number of the newest prompt showing.
+ * Later prompts aren't rendered, and a commit appears with its last prompt.
+ */
+export function Timeline({ story, revealed }: { story: Story; revealed?: number }) {
+  const replaying = revealed !== undefined;
+  const groups = useMemo(() => buildTimeline(story), [story]);
+  const shown = groups.filter((group) => !replaying || group.items.some((item) => isRevealed(item, revealed)));
+
   return (
-    <section aria-label="Timeline" className="mx-auto max-w-3xl px-4 pb-16 md:px-6">
-      {buildTimeline(story).map((group, i) => (
+    <section id="timeline" aria-label="Timeline" className="mx-auto max-w-3xl px-4 pb-16 md:px-6">
+      {shown.map((group, i) => (
         <div key={i} className={i === 0 ? "mt-12" : "mt-12 border-t border-line pt-6"}>
           <h2 className="mb-4 text-[15px] font-semibold tracking-wide text-muted uppercase">{heading(group)}</h2>
           <div className="relative">
             <span aria-hidden="true" className="absolute inset-y-0 left-3 w-px bg-line md:left-4" />
             <ol className="flex flex-col gap-6 md:gap-8">
               {group.items.map((item, j) =>
-                item.kind === "prompt" ? (
-                  <PromptCard key={item.prompt.id} prompt={item.prompt} showDay={startsNewDay(group, j)} />
+                replaying && !isRevealed(item, revealed) ? null : item.kind === "prompt" ? (
+                  <PromptCard
+                    key={item.prompt.id}
+                    prompt={item.prompt}
+                    showDay={startsNewDay(group, j)}
+                    replay={replaying ? { current: item.prompt.n === revealed } : undefined}
+                  />
                 ) : (
-                  <CommitMarker key={item.commit.sha} commit={item.commit} remoteUrl={story.repo.remoteUrl} />
+                  <CommitMarker key={item.commit.sha} commit={item.commit} remoteUrl={story.repo.remoteUrl} replay={replaying} />
                 ),
               )}
             </ol>

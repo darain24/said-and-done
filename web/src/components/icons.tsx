@@ -30,3 +30,23 @@ export const MonitorIcon = ({ className = "size-5" }: IconProps) => (
     <path d="M8 21h8M12 17v4" />
   </svg>
 );
+
+export const PlayIcon = ({ className = "size-5" }: IconProps) => (
+  <svg {...base} fill="currentColor" className={className}>
+    <path d="M7 4.5v15l12.5-7.5z" />
+  </svg>
+);
+
+export const PauseIcon = ({ className = "size-5" }: IconProps) => (
+  <svg {...base} fill="currentColor" className={className}>
+    <rect x="6" y="4.5" width="4" height="15" rx="1" />
+    <rect x="14" y="4.5" width="4" height="15" rx="1" />
+  </svg>
+);
+
+export const RestartIcon = ({ className = "size-5" }: IconProps) => (
+  <svg {...base} className={className}>
+    <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
+    <path d="M3 3v5h5" />
+  </svg>
+);

@@ -1,8 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import type { Story } from "../../src/story/model";
 import { Header, UnredactedBanner } from "./components/Header";
+import { ReplayBar } from "./components/ReplayBar";
 import { Stats } from "./components/Stats";
 import { EmptyState, Timeline } from "./components/Timeline";
 import type { Loaded } from "./lib/loadStory";
+import { revealedN, statsAt } from "./lib/replay";
+import { commitAnchors } from "./lib/timeline";
+import { useReplay } from "./lib/useReplay";
 
 /** DESIGN §5: bad story data. */
 function DamagedPanel() {
@@ -20,16 +25,23 @@ export default function App({ loaded }: { loaded: Loaded }) {
   }, [title]);
 
   if (!loaded.ok) return <DamagedPanel />;
-  const { story } = loaded;
+  return <StoryPage story={loaded.story} />;
+}
+
+function StoryPage({ story }: { story: Story }) {
+  const replay = useReplay(story);
+  const anchors = useMemo(() => commitAnchors(story), [story]);
+  const live = useMemo(() => (replay.active ? statsAt(story, anchors, replay.cursor) : story.stats), [replay.active, replay.cursor, story, anchors]);
 
   return (
     <>
-      <Header story={story} />
+      <Header story={story} onReplay={replay.start} />
       {!story.redacted && <UnredactedBanner />}
-      <main>
-        <Stats stats={story.stats} />
-        {story.prompts.length === 0 ? <EmptyState /> : <Timeline story={story} />}
+      <main className={replay.active ? "pb-40" : undefined}>
+        <Stats stats={story.stats} live={live} />
+        {story.prompts.length === 0 ? <EmptyState /> : <Timeline story={story} revealed={replay.active ? revealedN(story, replay.cursor) : undefined} />}
       </main>
+      {replay.active && <ReplayBar replay={replay} />}
     </>
   );
 }

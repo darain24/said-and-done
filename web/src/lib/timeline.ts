@@ -1,7 +1,9 @@
 // Arranges prompts and commits into session groups for the timeline (FR-42, FR-44).
-import type { Commit, Prompt, Session, Story } from "../../../src/story/model";
+// Extensions are explicit so the root tests can import this file too.
+import type { Commit, Prompt, Session, Story } from "../../../src/story/model.js";
 
-export type TimelineItem = { kind: "prompt"; prompt: Prompt } | { kind: "commit"; commit: Commit };
+/** A commit's `after` is the prompt it follows (0: before every prompt). */
+export type TimelineItem = { kind: "prompt"; prompt: Prompt } | { kind: "commit"; commit: Commit; after: number };
 
 export interface TimelineGroup {
   /** null: commits made before the first prompt. */
@@ -13,17 +15,30 @@ export interface TimelineGroup {
   items: TimelineItem[];
 }
 
-export function buildTimeline(story: Story): TimelineGroup[] {
-  // Each commit follows the last prompt that led to it; a commit with no
-  // prompts follows the last prompt before it in time (0: before them all).
-  const commitsAfter = new Map<number, Commit[]>();
+/**
+ * The prompt each commit follows, by sha. A commit follows the last prompt that
+ * led to it; a commit with no prompts follows the last prompt before it in time
+ * (0: before them all).
+ */
+export function commitAnchors(story: Story): Map<string, number> {
+  const anchors = new Map<string, number>();
   for (const commit of story.commits) {
     let after = 0;
     if (commit.promptNs.length > 0) after = Math.max(...commit.promptNs);
     else for (const p of story.prompts) if (Date.parse(p.at) <= Date.parse(commit.at)) after = p.n;
+    anchors.set(commit.sha, after);
+  }
+  return anchors;
+}
+
+export function buildTimeline(story: Story): TimelineGroup[] {
+  const anchors = commitAnchors(story);
+  const commitsAfter = new Map<number, Commit[]>();
+  for (const commit of story.commits) {
+    const after = anchors.get(commit.sha) ?? 0;
     commitsAfter.set(after, [...(commitsAfter.get(after) ?? []), commit]);
   }
-  const commitItems = (n: number): TimelineItem[] => (commitsAfter.get(n) ?? []).map((commit) => ({ kind: "commit", commit }));
+  const commitItems = (n: number): TimelineItem[] => (commitsAfter.get(n) ?? []).map((commit) => ({ kind: "commit", commit, after: n }));
 
   const groups: TimelineGroup[] = [];
   const leading = commitItems(0);

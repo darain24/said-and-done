@@ -1,6 +1,7 @@
 // CommitMarker and DiffStat (FR-44, DESIGN §4.5, §4.6).
 import type { Commit, LinkConfidence } from "../../../src/story/model";
 import { commitUrl, formatCount, plural } from "../lib/format";
+import { REVEAL_CLASS } from "../lib/replay";
 
 const SQUARES = 5;
 
@@ -35,13 +36,13 @@ const CONFIDENCE_TAG: Record<LinkConfidence, { label: string; title: string; cla
   },
 };
 
-export function CommitMarker({ commit, remoteUrl }: { commit: Commit; remoteUrl?: string }) {
+export function CommitMarker({ commit, remoteUrl, replay = false }: { commit: Commit; remoteUrl?: string; replay?: boolean }) {
   const url = commitUrl(remoteUrl, commit.sha);
   const short = commit.sha.slice(0, 7);
   const tag = CONFIDENCE_TAG[commit.confidence];
 
   return (
-    <li className="relative pl-9 md:pl-12">
+    <li className={replay ? `relative pl-9 md:pl-12 ${REVEAL_CLASS}` : "relative pl-9 md:pl-12"}>
       <span aria-hidden="true" className="absolute top-3.5 left-3 size-3 -translate-x-1/2 rotate-45 bg-ink md:left-4" />
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 py-2">
         {url ? (

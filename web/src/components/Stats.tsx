@@ -1,7 +1,9 @@
-// Stats (FR-41, DESIGN §4.1). Same numbers as `said scan`.
+// Stats (FR-41, DESIGN §4.1). Same numbers as `said scan`; during replay the
+// tiles count up to the totals so far (FR-47).
 import type { ReactNode } from "react";
 import type { Stats as StoryStats } from "../../../src/story/model";
 import { formatCount, formatDuration, plural } from "../lib/format";
+import { useCountUp } from "../lib/useReplay";
 
 /** "1h 25m" with small unit letters, so long durations still fit the tile. */
 function withSmallUnits(value: string): ReactNode {
@@ -17,12 +19,13 @@ function withSmallUnits(value: string): ReactNode {
 }
 
 // The number scales with the tile (cqi), capped at 40px on phones and 72px from md.
-function StatTile({ value, label }: { value: ReactNode; label: string }) {
+function StatTile({ value, format, label }: { value: number; format: (n: number) => ReactNode; label: string }) {
+  const shown = useCountUp(value);
   return (
     <div className="@container flex flex-col-reverse gap-2 rounded-xl bg-sunken p-4 md:p-6">
       <dt className="text-sm font-medium text-muted md:text-base">{label}</dt>
       <dd className="text-[length:min(28cqi,40px)] leading-none font-semibold tracking-tight whitespace-nowrap tabular-nums md:text-[length:min(28cqi,72px)]">
-        {value}
+        {format(shown)}
       </dd>
     </div>
   );
@@ -30,17 +33,20 @@ function StatTile({ value, label }: { value: ReactNode; label: string }) {
 
 const Value = ({ children }: { children: ReactNode }) => <span className="font-medium text-ink tabular-nums">{children}</span>;
 
-export function Stats({ stats }: { stats: StoryStats }) {
+const durationWithSmallUnits = (ms: number) => withSmallUnits(formatDuration(ms));
+
+/** `live` replaces the tile numbers during replay; the line underneath keeps the totals. */
+export function Stats({ stats, live = stats }: { stats: StoryStats; live?: StoryStats }) {
   return (
     <section aria-labelledby="stats-heading" className="mx-auto max-w-5xl px-4 pt-8 md:px-6">
       <h2 id="stats-heading" className="sr-only">
         Totals
       </h2>
       <dl className="grid grid-cols-2 gap-3 md:gap-4">
-        <StatTile value={formatCount(stats.prompts)} label={stats.prompts === 1 ? "prompt" : "prompts"} />
-        <StatTile value={formatCount(stats.words)} label={stats.words === 1 ? "word" : "words"} />
-        <StatTile value={formatCount(stats.commits)} label={stats.commits === 1 ? "commit" : "commits"} />
-        <StatTile value={withSmallUnits(formatDuration(stats.activeMs))} label="active" />
+        <StatTile value={live.prompts} format={formatCount} label={live.prompts === 1 ? "prompt" : "prompts"} />
+        <StatTile value={live.words} format={formatCount} label={live.words === 1 ? "word" : "words"} />
+        <StatTile value={live.commits} format={formatCount} label={live.commits === 1 ? "commit" : "commits"} />
+        <StatTile value={live.activeMs} format={durationWithSmallUnits} label="active" />
       </dl>
       <ul className="mt-5 flex flex-col gap-1 text-sm text-muted md:flex-row md:flex-wrap md:gap-x-6">
         <li>
