@@ -83,3 +83,29 @@ function parseRecord(record: string): GitCommit {
     removed: files.reduce((sum, f) => sum + f.removed, 0),
   };
 }
+
+/** The top folder of the repo containing `path`. */
+export async function findRepoRoot(path: string): Promise<string> {
+  return (await git(path, ["rev-parse", "--show-toplevel"])).trim();
+}
+
+/** origin as an https URL with no credentials, or undefined if there isn't a usable one. */
+export async function readRemoteUrl(repoRoot: string): Promise<string | undefined> {
+  try {
+    return toHttpsRemote((await git(repoRoot, ["remote", "get-url", "origin"])).trim());
+  } catch {
+    return undefined;
+  }
+}
+
+export function toHttpsRemote(remote: string): string | undefined {
+  const scp = /^[\w.-]+@([\w.-]+):(.+)$/.exec(remote); // git@github.com:owner/repo.git
+  let url: URL;
+  try {
+    url = new URL(scp ? `https://${scp[1]}/${scp[2]}` : remote);
+  } catch {
+    return undefined;
+  }
+  if (!["https:", "http:", "ssh:", "git:"].includes(url.protocol)) return undefined;
+  return `https://${url.hostname}${url.pathname.replace(/\.git$/, "").replace(/\/$/, "")}`;
+}

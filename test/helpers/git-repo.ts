@@ -1,6 +1,6 @@
 // Builds throwaway git repos with fixed commit dates for tests.
 import { execFileSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 
@@ -15,7 +15,8 @@ export interface TempRepo {
 }
 
 export function makeTempRepo(): TempRepo {
-  const root = mkdtempSync(join(tmpdir(), "said-git-"));
+  // The real path, as git and Claude Code report it (macOS temp folders sit behind a /var symlink).
+  const root = realpathSync(mkdtempSync(join(tmpdir(), "said-git-")));
   const git = (args: string[], env: Record<string, string> = {}) =>
     execFileSync("git", [...ISOLATED, ...args], {
       cwd: root,

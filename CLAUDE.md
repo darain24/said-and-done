@@ -51,6 +51,7 @@ npm test                       # every test/**/*.test.ts with node:test (via tsx
 npm run dev                    # Vite dev server for web/
 npm run typecheck              # tsc for src/, test/, scripts/ and web/
 node dist/cli.js --help        # run the built CLI
+node --import tsx src/cli.ts scan   # run the CLI from source, no build needed
 ```
 
 Single test file or test name:

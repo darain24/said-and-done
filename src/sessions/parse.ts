@@ -72,7 +72,7 @@ function resolvePath(base: string, path: string): string {
   return resolve(base, path === "~" || path.startsWith("~/") ? homedir() + path.slice(1) : path);
 }
 
-function isInside(root: string, path: string): boolean {
+export function isInside(root: string, path: string): boolean {
   const rel = relative(root, path);
   return rel === "" || (rel !== ".." && !rel.startsWith(`..${sep}`) && !isAbsolute(rel));
 }

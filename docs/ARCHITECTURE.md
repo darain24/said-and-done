@@ -149,8 +149,7 @@ export interface Story {
   prompts: Prompt[];               // sorted by time, globally numbered from 1
   commits: Commit[];               // sorted by time
   stats: Stats;
-  diagnostics: { malformed: number; ignoredByType: Record<string, number>;
-                 outOfRepo: number; excludedByFilter: number };
+  diagnostics: ParseDiagnostics & { excludedByFilter: number };  // every parser count (src/sessions/parse.ts)
 }
 export interface Session { id: string; start: string; end: string; promptCount: number }
 export interface Prompt {
