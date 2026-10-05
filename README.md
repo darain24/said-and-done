@@ -4,6 +4,8 @@
 
 **Turn a voice-built repo into a replayable Build Story.**
 
+▶️ **[Watch the demo video](https://drive.google.com/file/d/1GHuO5utzaZlh_F7xAxyPb3x0Oy1h3cLa/view?usp=drive_link)**: built entirely by voice, on camera.
+
 Said & Done reads a repo's Claude Code session history and its git log, and writes one self-contained HTML page: every prompt, the files it touched, the commit it led to, the totals, and a timelapse replay of the whole build. It also prints YouTube chapter markers and writes a "built by voice" README badge.
 
 ## The problem
@@ -97,6 +99,8 @@ Redaction is pattern-based, so give the page a quick read before you publish it.
 [![built by voice: 19 prompts](docs/said-badge.svg)](#built-by-voice)
 
 Said & Done was built for the Wispr Flow × Hacker House Goa shortlisting task. All of its code was written by Claude Code from prompts I spoke through [Wispr Flow](https://wisprflow.ai), recorded on camera. No code or prompts were typed.
+
+**Demo video:** [watch on Google Drive](https://drive.google.com/file/d/1GHuO5utzaZlh_F7xAxyPb3x0Oy1h3cLa/view?usp=drive_link)
 
 **Written before recording started:** [`CLAUDE.md`](CLAUDE.md) and the [`docs/`](docs) folder (PRD, architecture, design, plan and recording runbook). They were planned in a typed chat beforehand and are the only files not produced by voice. Everything else, including the CLI, the web page, the tests and this README, came from spoken prompts.
 
