@@ -5,6 +5,7 @@ import { parseArgs } from "node:util";
 import { BADGE_HELP, badge } from "./commands/badge.js";
 import { BUILD_HELP, build } from "./commands/build.js";
 import { CHAPTERS_HELP, chapters } from "./commands/chapters.js";
+import { DOCTOR_HELP, doctor } from "./commands/doctor.js";
 import { HOOK_HELP, hook } from "./commands/hook.js";
 import { UsageError } from "./commands/options.js";
 import { SCAN_HELP, scan } from "./commands/scan.js";
@@ -23,6 +24,7 @@ const COMMANDS = {
   chapters: { run: chapters, help: CHAPTERS_HELP },
   badge: { run: badge, help: BADGE_HELP },
   hook: { run: hook, help: HOOK_HELP },
+  doctor: { run: doctor, help: DOCTOR_HELP },
 } as const;
 
 const HELP = `said — see the prompt behind every line of code
@@ -35,6 +37,7 @@ Commands:
   chapters    Print YouTube chapter markers
   badge       Write a "built by voice" README badge
   hook        Install or remove the prompt ledger hook
+  doctor      Check the setup and say how to fix problems
 
 Options:
   -h, --help     Show this help

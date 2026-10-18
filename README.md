@@ -48,6 +48,7 @@ Open `build-story.html` in any browser. It works offline from `file://`, so you 
 | `said build` | Writes `build-story.html` and prints a redaction preview. `--out`, `--title`, `--no-redact`. |
 | `said chapters --start <time>` | Prints YouTube chapter lines (`0:00 Title`), one per commit made during the recording. `--end` is optional. |
 | `said badge` | Writes `said-badge.svg`: "built by voice │ N prompts". |
+| `said doctor` | Checks Node, git, the repo, `said.config.json`, the session files and the template, with a fix for each problem. Paste its output into bug reports. |
 | `said hook install` | Adds a `UserPromptSubmit` hook that logs each prompt to `.said/ledger.jsonl` (git-ignored). `uninstall` removes it. |
 
 `scan`, `build` and `badge` share these options:

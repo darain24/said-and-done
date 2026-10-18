@@ -208,10 +208,11 @@ Escaping `<` means a prompt containing `</script>` or `<!--` can't break out of 
 | Code | Meaning |
 |---|---|
 | 0 | Success |
-| 1 | Usage error (bad flags or a bad date) |
+| 1 | Usage error (bad flags, a bad date, or an invalid `said.config.json`) |
 | 2 | No sessions found for the repo (message names the folders searched) |
 | 3 | Git missing or failed |
 | 4 | Template missing or damaged (package not built) |
+| 5 | `said doctor` found at least one failing check |
 
 Messages say what happened and what to try next. Stack traces only appear with `SAID_DEBUG=1`.
 
