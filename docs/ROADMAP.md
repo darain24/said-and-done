@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | Adopted Oct 18, 2026. Phase 0 done; Phase 1 in progress |
+| **Status** | Adopted Oct 18, 2026. Phase 0 done; Phase 1 done apart from the first npm publish and a green Windows CI run |
 | **Owner** | darain24 |
 | **Starting point** | v0.1.0: the Wispr Flow contest build (19 commits, CLI + single-file Build Story page) |
 | **Goal** | A published, maintained open-source tool people actually install, with a UI worth screenshotting |
@@ -102,24 +102,24 @@ Two surfaces: the **Build Story page** (the product) and a **landing site** (the
 
 - [ ] Publish to npm as **`said-and-done`** (name is free; `said` is taken). Binary stays `said`.
 - [ ] `npx said-and-done build` works from any repo with no clone.
-- [ ] npm provenance (`--provenance`) and signed releases from CI.
+- [x] npm provenance (`--provenance`) and signed releases from CI.
 - [ ] Optional Homebrew tap later.
 
 ### 5.2 Quality gates (GitHub Actions)
 
-- [ ] CI matrix: Ubuntu, macOS, **Windows** × Node 22 and 24.
-- [ ] Jobs: typecheck, lint, unit tests with coverage (target ≥ 85% on `src/`), template build and size budget.
+- [x] CI matrix: Ubuntu, macOS, **Windows** × Node 22 and 24.
+- [x] Jobs: typecheck, lint, unit tests with coverage (gate: lines 90%, branches 85%; currently 98%), template build and size budget.
 - [ ] Playwright end-to-end tests for the page: renders a fixture story, replay works, deep links work, no console errors.
 - [ ] Visual regression snapshots (light, dark, mobile).
 - [ ] Automated accessibility check with axe on every page state.
 - [ ] Performance test: 5,000-prompt story renders in under 1.5 s; `build` handles 200 MB of sessions in under 5 s.
-- [ ] Linting and formatting with Biome (one fast tool, no plugin sprawl).
+- [x] Linting and formatting with Biome (one fast tool, no plugin sprawl).
 
 ### 5.3 Robustness
 
-- [ ] **Windows support:** path encoding, `C:\Users` handling, line endings, `git` on PATH.
-- [ ] `said doctor`: checks Node version, git, where sessions were found, adapter detection, and prints fixes.
-- [ ] Config file `said.config.json` (title, excluded sessions, since/until, redaction extras, adapters) so flags don't need repeating.
+- [~] **Windows support:** path normalisation, `C--Users-` redaction, LF line endings and test helpers done; confirmed once the Windows CI job is green.
+- [x] `said doctor`: checks Node version, git, where sessions were found, adapter detection, and prints fixes.
+- [x] Config file `said.config.json` (title, sessions dir, excluded sessions, since/until, output paths) with a JSON schema. Redaction extras and adapters join it in later phases.
 - [ ] Custom redaction patterns and an allow-list in config.
 - [ ] Session-format drift detection: a `formatVersion` check per adapter with a clear warning.
 - [ ] Fuzz tests for the parser and redaction (random and mutated JSONL).
@@ -127,14 +127,14 @@ Two surfaces: the **Build Story page** (the product) and a **landing site** (the
 
 ### 5.4 Release and project hygiene
 
-- [ ] `LICENSE` (MIT).
-- [ ] Semantic versioning with Changesets; generated `CHANGELOG.md`.
-- [ ] `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md` (how to report a redaction miss privately).
-- [ ] Issue and PR templates; labels; a "good first issue: write an adapter" track.
-- [ ] Dependabot and CodeQL.
-- [ ] Move contest material (`PLAN.md`, `RECORDING.md`, the shortlisting notes) into `docs/archive/contest-2026/`.
-- [ ] Rewrite `PRD.md` as v2 with the new positioning; update `ARCHITECTURE.md` for adapters, notes and blame.
-- [ ] Update `CLAUDE.md`: drop the deadline, keep the voice-prompting notes.
+- [x] `LICENSE` (MIT).
+- [x] Semantic versioning with Changesets; generated `CHANGELOG.md`.
+- [x] `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md` (how to report a redaction miss privately).
+- [x] Issue and PR templates; labels; a "good first issue: write an adapter" track.
+- [x] Dependabot and CodeQL.
+- [x] Move contest material (`PLAN.md`, `RECORDING.md`, the shortlisting notes) into `docs/archive/contest-2026/`.
+- [x] Rewrite `PRD.md` §1–4 for the new positioning. (`ARCHITECTURE.md` gets adapters, notes and blame in Phase 3.)
+- [x] Update `CLAUDE.md`: drop the deadline, keep the voice-prompting notes.
 
 ## 6. Resume impact
 

@@ -46,10 +46,11 @@ test("config: paths are resolved against the config file's folder; $schema is al
   const dir = tempDir(t);
   mkdirSync(join(dir, "conf"));
   const file = join(dir, "conf", "said.json");
-  writeFileSync(file, JSON.stringify({ $schema: "x", sessionsDir: "../sessions", out: "story.html", badgeOut: "/abs/badge.svg", title: "T" }));
+  const absolute = join(dir, "elsewhere", "badge.svg");
+  writeFileSync(file, JSON.stringify({ $schema: "x", sessionsDir: "../sessions", out: "story.html", badgeOut: absolute, title: "T" }));
   const { config, path } = await loadConfig(dir, file);
   assert.equal(path, file);
-  assert.deepEqual(config, { title: "T", sessionsDir: join(dir, "sessions"), out: join(dir, "conf", "story.html"), badgeOut: "/abs/badge.svg" });
+  assert.deepEqual(config, { title: "T", sessionsDir: join(dir, "sessions"), out: join(dir, "conf", "story.html"), badgeOut: absolute });
 });
 
 test("config: scan reads said.config.json at the repo root; flags add to it and win", async (t) => {

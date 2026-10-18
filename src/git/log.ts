@@ -1,6 +1,7 @@
 // Reads the repo's git log with per-file line stats (FR-10, ARCHITECTURE §5).
 // Author names and emails are never requested.
 import { execFile } from "node:child_process";
+import { resolve } from "node:path";
 import { promisify } from "node:util";
 
 const run = promisify(execFile);
@@ -92,7 +93,8 @@ function parseRecord(record: string): GitCommit {
 
 /** The top folder of the repo containing `path`. */
 export async function findRepoRoot(path: string): Promise<string> {
-  return (await git(path, ["rev-parse", "--show-toplevel"])).trim();
+  // resolve(): on Windows git prints C:/Users/…, while session files say C:\Users\….
+  return resolve((await git(path, ["rev-parse", "--show-toplevel"])).trim());
 }
 
 /** origin as an https URL with no credentials, or undefined if there isn't a usable one. */

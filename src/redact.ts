@@ -32,6 +32,8 @@ const RULES: Rule[] = [
   { kind: "home", pattern: new RegExp(String.raw`\b[A-Za-z]:[\\/]Users[\\/]${NAME}`, "g"), replace: () => "~" },
   // Claude Code project folders encode the home path as "-Users-<name>-…".
   { kind: "home", pattern: /(?<![\w-])-(?:Users|home)-[A-Za-z0-9]+(?=-)/g, replace: () => "-~" },
+  // …and on Windows, C:\Users\<name>\… as "C--Users-<name>-…".
+  { kind: "home", pattern: /\b[A-Za-z]--Users-[A-Za-z0-9]+(?=-)/g, replace: () => "~" },
 
   // NAME_KEY=value, ?token=value, --token=value. The name is kept; only the value goes.
   {

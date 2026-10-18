@@ -1,11 +1,11 @@
 // Builds throwaway git repos with fixed commit dates for tests.
 import { execFileSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, realpathSync, rmSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { devNull, tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 
 // Isolate from the developer's own git config: no signing, hooks or templates.
-const ISOLATED = ["-c", "commit.gpgsign=false", "-c", "core.hooksPath=/dev/null", "-c", "init.templateDir="];
+const ISOLATED = ["-c", "commit.gpgsign=false", "-c", `core.hooksPath=${devNull}`, "-c", "init.templateDir="];
 
 export interface TempRepo {
   root: string;
@@ -15,13 +15,14 @@ export interface TempRepo {
 }
 
 export function makeTempRepo(): TempRepo {
-  // The real path, as git and Claude Code report it (macOS temp folders sit behind a /var symlink).
-  const root = realpathSync(mkdtempSync(join(tmpdir(), "said-git-")));
+  // The real path, as git and Claude Code report it (macOS temp folders sit behind a /var
+  // symlink; Windows runners use 8.3 short names like RUNNER~1, which only .native expands).
+  const root = realpathSync.native(mkdtempSync(join(tmpdir(), "said-git-")));
   const git = (args: string[], env: Record<string, string> = {}) =>
     execFileSync("git", [...ISOLATED, ...args], {
       cwd: root,
       encoding: "utf8",
-      env: { ...process.env, GIT_CONFIG_GLOBAL: "/dev/null", GIT_CONFIG_NOSYSTEM: "1", ...env },
+      env: { ...process.env, GIT_CONFIG_GLOBAL: devNull, GIT_CONFIG_NOSYSTEM: "1", ...env },
     }).trim();
 
   git(["init", "-q", "-b", "main"]);

@@ -1,0 +1,4 @@
+# LF everywhere, so fixtures, templates and snapshots match on Windows too.
+* text=auto eol=lf
+*.png binary
+*.svg text eol=lf

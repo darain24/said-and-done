@@ -28,7 +28,7 @@ Most prompts are dictated through Wispr Flow, so the project keeps its built-by-
 
 Full detail in `docs/ARCHITECTURE.md`.
 
-- **`src/`**: Node 22 + TypeScript CLI (`said scan`, `build`, `chapters`, `badge`, `hook install`). **Zero runtime npm dependencies**; Node built-ins only. Tested with `node:test`.
+- **`src/`**: Node 22 + TypeScript CLI (`said scan`, `build`, `chapters`, `badge`, `hook install`, `doctor`). Per-repo defaults come from `said.config.json` (`src/config.ts`; keep `said.config.schema.json` in sync). **Zero runtime npm dependencies**; Node built-ins only. Tested with `node:test`.
 - **`web/`**: Vite + React + TypeScript, Tailwind v4 via `@tailwindcss/vite`. `vite-plugin-singlefile` bundles it **once, at package build time,** into `dist/story-template.html`.
 - **Data flow:** session JSONL + git log → locate → parse → filter/dedupe → redact → correlate → stats → `Story` (`src/story/model.ts`) → injected into the template's `<script id="story-data" type="application/json">__SAID_STORY__</script>`, escaping `<` as `\u003c`. The output must open offline from `file://`. Never fetch anything at runtime.
 - **Redaction** runs immediately after parsing, so nothing unredacted reaches the model or the output.
@@ -49,6 +49,10 @@ npm run build                  # web/ → dist/story-template.html (checked), th
 npm test                       # every test/**/*.test.ts with node:test (via tsx)
 npm run dev                    # Vite dev server for web/
 npm run typecheck              # tsc for src/, test/, scripts/ and web/
+npm run lint                   # Biome lint + format check (lint:fix to apply)
+npm run check                  # lint, typecheck and tests: run before every commit
+npm run test:coverage          # tests with coverage gates (lines 90, branches 85, functions 90)
+npm run changeset              # describe a user-facing change for the changelog
 node dist/cli.js --help        # run the built CLI
 node --import tsx src/cli.ts scan   # run the CLI from source, no build needed
 ```

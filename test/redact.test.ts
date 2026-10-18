@@ -26,6 +26,7 @@ const mustRedact: [name: string, input: string, expected: string, kind: Redactio
   ["file URL", "open file:///Users/jane/app/build-story.html", "open file://~/app/build-story.html", "home"],
   ["home at end of sentence", "It lives in /Users/jane.", "It lives in ~.", "home"],
   ["Claude project folder", "~/.claude/projects/-Users-jane-Documents-app/", "~/.claude/projects/-~-Documents-app/", "home"],
+  ["Claude project folder on Windows", "C:\\Users\\jane\\.claude\\projects\\C--Users-jane-app", "~\\.claude\\projects\\~-app", "home"],
   ["private IP 192.168", "ssh 192.168.1.20", "ssh [redacted:ip]", "ip"],
   ["private IP 10/8", "host 10.0.0.5.", "host [redacted:ip].", "ip"],
   ["private IP 172.16/12", "172.16.4.2:8080", "[redacted:ip]:8080", "ip"],
