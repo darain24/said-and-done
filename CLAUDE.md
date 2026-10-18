@@ -4,25 +4,24 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project status
 
-Said & Done is a submission for the Wispr Flow shortlisting task (deadline Oct 6, 2026, 11:59 PM). The scaffold is in place (CLI, web app, build and test scripts); features aren't built yet. The specs live in `docs/`. Read the relevant one before starting any piece of work:
+Said & Done is an open-source CLI that gives AI-written code prompt-level provenance: it links coding-agent sessions to git history and renders a Build Story page. v0.1.0 was a contest entry (Wispr Flow, Oct 2026; archived in `docs/archive/contest-2026/`). It's now being grown into a maintained product, phase by phase, following `docs/ROADMAP.md`. Read the relevant doc before starting any piece of work:
 
 | Doc | Use it for |
 |---|---|
+| `docs/ROADMAP.md` | Where the project is going: positioning, phases, unique features (`U1`…), UI work (`UI-1`…), production checklist |
 | `docs/PRD.md` | What to build. Requirement IDs (`FR-n`, `NFR-n`), priorities (P0/P1/P2), acceptance criteria, metric definitions |
 | `docs/ARCHITECTURE.md` | How to build it: repo layout, parsing rules, correlation algorithm, story model, injection, testing |
 | `docs/DESIGN.md` | **Any UI work**: tokens, typography, layout, components, replay behaviour, Tailwind rules. Follow it exactly; extend it before inventing new patterns |
-| `docs/PLAN.md` | Schedule, demo plan, submission checklist |
-| `docs/RECORDING.md` | Recording runbook (for the user, not for code) |
 
-Reference requirement IDs in commit messages and test names where it helps (for example `FR-2: exclude bash-input entries`).
+Reference requirement and roadmap IDs in commit messages and test names where it helps (for example `FR-2: exclude bash-input entries`, `U1: said blame`).
 
-## Working in this repo: prompts arrive by voice
+## Working in this repo: prompts often arrive by voice
 
-All project code is written from prompts the user dictates through Wispr Flow, recorded on camera. This affects how you work:
+Most prompts are dictated through Wispr Flow, so the project keeps its built-by-voice story. This affects how you work:
 
 - Prompts may contain transcription errors: misheard technical words, spelled-out symbols ("slash", "dot tsx"), or missing punctuation. Read them for intent. If a misheard word changes the meaning, ask a short question instead of guessing.
 - The user can't easily type. Ask questions they can answer in a sentence or by choosing an option, and never ask them to paste or edit text by hand.
-- Keep replies short and easy to scan on a screen recording. Lead with what changed and how to see it.
+- Keep replies short and easy to scan. Lead with what changed and how to see it.
 - Commit roughly once per feature with a descriptive message, so the git history reads as clear steps. Don't push unless asked.
 
 ## Architecture in brief

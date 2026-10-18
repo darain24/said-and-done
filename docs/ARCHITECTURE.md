@@ -41,7 +41,7 @@ said-and-done/
 ├─ README.md               # public face of the project
 ├─ CLAUDE.md               # instructions for Claude Code (must stay at the root)
 ├─ package.json            # bin "said" → dist/cli.js; workspace scripts
-├─ docs/                   # PLAN, PRD, DESIGN, ARCHITECTURE, RECORDING
+├─ docs/                   # ROADMAP, PRD, DESIGN, ARCHITECTURE; archive/ for the contest docs
 ├─ src/
 │  ├─ cli.ts               # argument parsing (node:util parseArgs), dispatch, exit codes
 │  ├─ commands/            # scan.ts · build.ts · chapters.ts · badge.ts · hook.ts

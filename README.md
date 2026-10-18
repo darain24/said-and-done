@@ -1,42 +1,46 @@
 # Said & Done
 
 [![built by voice: 19 prompts](docs/said-badge.svg)](#built-by-voice)
+[![License: MIT](https://img.shields.io/badge/license-MIT-5B4BC4.svg)](LICENSE)
 
-**Turn a voice-built repo into a replayable Build Story.**
+**See the prompt behind every line of code.**
 
-▶️ **[Watch the demo video](https://drive.google.com/file/d/1GHuO5utzaZlh_F7xAxyPb3x0Oy1h3cLa/view?usp=drive_link)**: built entirely by voice, on camera.
+Said & Done gives AI-written software prompt-level provenance. It links your coding-agent sessions to your git history and writes one self-contained HTML page, the **Build Story**: every prompt, the files it touched, the commit it led to, the totals, and a timelapse replay of the whole build. It also writes a "built by voice" README badge and YouTube chapter markers.
 
-Said & Done reads a repo's Claude Code session history and its git log, and writes one self-contained HTML page: every prompt, the files it touched, the commit it led to, the totals, and a timelapse replay of the whole build. It also prints YouTube chapter markers and writes a "built by voice" README badge.
+▶️ **[Watch the original demo](https://drive.google.com/file/d/1GHuO5utzaZlh_F7xAxyPb3x0Oy1h3cLa/view?usp=drive_link)**: the first version, built entirely by voice, on camera.
 
-## The problem
+## Why
 
-More and more software is built by talking to an AI coding agent, often by voice. But when someone says "I built this by voice", there's nothing to show for it apart from a video.
+A growing share of code is written by AI coding agents, often from spoken prompts. Git records *what* changed. Nothing records *what was asked for*.
 
-- The prompts that shaped the project sit in local session files nobody else can see.
-- The git history shows *what* changed, but not what was *asked for*.
-- Contest entrants, people writing about their workflow and teams reviewing AI-assisted work have no simple way to turn that history into something others can read and check.
+- The prompts that shaped a project sit in local session files nobody else can see.
+- Reviewers of AI-assisted pull requests can't see the instructions behind the diff.
+- Builders who want to show how they work have nothing to show but a video.
 
-Said & Done makes the prompt history **visible and checkable**. It can't prove a prompt was spoken rather than typed (nothing in a transcript can), and the page says so. The screen recording is the proof of voice; the Build Story is the record of what was said and what got done.
+Said & Done makes the prompt history **visible and checkable**, and safe to publish. It can't prove a prompt was spoken rather than typed (nothing in a transcript can), and the page says so.
+
+Where it's going (agent adapters, `said blame`, provenance in git notes, a GitHub Action for PRs): see the [roadmap](docs/ROADMAP.md).
 
 ## Quick start
 
-Needs Node 22+, git, and a repo you've worked on with Claude Code. macOS and Linux are supported.
+Needs Node 22+, git, and a repo you've worked on with Claude Code. macOS and Linux are supported; Windows support is in progress.
 
 ```bash
 git clone https://github.com/darain24/said-and-done.git
 cd said-and-done
 npm install
 npm run build
+npm link            # makes the `said` command available everywhere
 ```
 
 Then, from inside the repo you want a story for:
 
 ```bash
-node /path/to/said-and-done/dist/cli.js scan     # check the numbers look right
-node /path/to/said-and-done/dist/cli.js build    # writes build-story.html
+said scan     # check the numbers look right
+said build    # writes build-story.html
 ```
 
-Open `build-story.html` in any browser. It works offline from `file://`, so you can also host it as-is on GitHub Pages. (Run `npm link` once in the said-and-done folder if you'd rather just type `said`.)
+Open `build-story.html` in any browser. It works offline from `file://`, so you can also host it as-is on GitHub Pages. An npm release (`npx said-and-done build`) is the next milestone.
 
 | Command | What it does |
 |---|---|
@@ -98,11 +102,9 @@ Redaction is pattern-based, so give the page a quick read before you publish it.
 
 [![built by voice: 19 prompts](docs/said-badge.svg)](#built-by-voice)
 
-Said & Done was built for the Wispr Flow × Hacker House Goa shortlisting task. All of its code was written by Claude Code from prompts I spoke through [Wispr Flow](https://wisprflow.ai), recorded on camera. No code or prompts were typed.
+Said & Done started as an entry for the Wispr Flow × Hacker House Goa shortlisting task. All of v0.1.0's code was written by Claude Code from prompts spoken through [Wispr Flow](https://wisprflow.ai), recorded on camera, in three days. Development continues the same way.
 
-**Demo video:** [watch on Google Drive](https://drive.google.com/file/d/1GHuO5utzaZlh_F7xAxyPb3x0Oy1h3cLa/view?usp=drive_link)
-
-**Written before recording started:** [`CLAUDE.md`](CLAUDE.md) and the [`docs/`](docs) folder (PRD, architecture, design, plan and recording runbook). They were planned in a typed chat beforehand and are the only files not produced by voice. Everything else, including the CLI, the web page, the tests and this README, came from spoken prompts.
+The only files not produced by voice are [`CLAUDE.md`](CLAUDE.md) and the original specs in [`docs/`](docs), which were planned in a typed chat beforehand. The contest plan and recording runbook are kept in [`docs/archive/contest-2026/`](docs/archive/contest-2026/).
 
 The badge above was made by Said & Done from this repo's own sessions, with the typed planning sessions left out:
 
@@ -112,13 +114,14 @@ said badge --exclude-session 061228f9 --exclude-session b877ca9b --out docs/said
 
 To add one to your own project, run `said badge` and paste the line it prints into your README.
 
+## Docs
+
 | Doc | What's in it |
 |---|---|
+| [Roadmap](docs/ROADMAP.md) | Positioning, unique features, UI plans, production checklist, phases |
 | [PRD](docs/PRD.md) | Problem, users, requirements (FR/NFR IDs), metrics, scope |
 | [Architecture](docs/ARCHITECTURE.md) | Repo layout, session parsing, prompt-to-commit linking, story model, testing |
 | [Design](docs/DESIGN.md) | Design tokens, layout, components and replay behaviour for the Build Story page |
-| [Plan](docs/PLAN.md) | Schedule, voice-build workflow, demo video, submission checklist |
-| [Recording](docs/RECORDING.md) | Screen-recording setup and scene-by-scene screenplay |
 
 ## Development
 
@@ -127,3 +130,7 @@ npm test            # node:test over test/**/*.test.ts
 npm run typecheck   # src/, test/, scripts/ and web/
 npm run dev         # Vite dev server for the Build Story page
 ```
+
+## License
+
+[MIT](LICENSE) © darain24

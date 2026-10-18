@@ -89,7 +89,7 @@ Claude Code writes all the code. You direct it by speaking prompts through Wispr
 
 ## Build phases
 
-Requirements: [PRD.md](PRD.md) · UI: [DESIGN.md](DESIGN.md) · Full technical design: [ARCHITECTURE.md](ARCHITECTURE.md).
+Requirements: [PRD.md](../../PRD.md) · UI: [DESIGN.md](../../DESIGN.md) · Full technical design: [ARCHITECTURE.md](../../ARCHITECTURE.md).
 
 **Stack and architecture.** The output must stay one self-contained HTML file that opens offline from `file://` and can be hosted on GitHub Pages.
 

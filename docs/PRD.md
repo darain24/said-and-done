@@ -2,10 +2,11 @@
 
 | | |
 |---|---|
-| **Status** | Approved for build, Oct 3, 2026 |
+| **Status** | v0.1.0 shipped Oct 5, 2026 (contest entry). v2 positioning adopted Oct 18, 2026 |
 | **Owner** | darain24 |
-| **Deadline** | Oct 6, 2026, 11:59 PM (Wispr Flow shortlisting task) |
-| **Related** | [PLAN.md](PLAN.md) · [DESIGN.md](DESIGN.md) · [ARCHITECTURE.md](ARCHITECTURE.md) · [RECORDING.md](RECORDING.md) |
+| **Related** | [ROADMAP.md](ROADMAP.md) · [DESIGN.md](DESIGN.md) · [ARCHITECTURE.md](ARCHITECTURE.md) · [contest archive](archive/contest-2026/) |
+
+> **v2 note.** Sections 1–4 describe the product as it is now positioned: prompt provenance for AI-written code. The requirement tables (§6, §7) are the shipped v0.1 baseline; new work is tracked in [ROADMAP.md](ROADMAP.md) (`U1`…, `UI-1`…) and gets FR IDs here as each piece is specified.
 
 Requirement IDs (`FR-`, `NFR-`) are stable. Refer to them in prompts, commits and tests.
 
@@ -13,42 +14,45 @@ Requirement IDs (`FR-`, `NFR-`) are stable. Refer to them in prompts, commits an
 
 ## 1. Problem
 
-More and more software is built by talking to an AI coding agent, often by voice. When someone says "I built this by voice", there's nothing to show for it apart from a video. The prompts that shaped the project sit in local session files nobody else can see. The git history shows *what* changed, but not what was *asked for*.
+A growing share of code is written by AI coding agents, often from spoken prompts. Git records *what* changed, but not *what was asked for*. The prompts that shaped a project sit in local session files nobody else can see, so reviewers, maintainers and the builders themselves can't answer "what was the prompt behind this?".
 
-People who need to show how something was built (contest entrants, people writing about their workflow, teams reviewing AI-assisted work) have no simple way to turn that history into something others can read.
+People who need to show or check how something was built (solo builders, open-source maintainers reviewing AI-assisted PRs, teams auditing AI-written changes, people writing about their workflow) have no simple way to turn that history into something others can read.
 
 ## 2. Product summary
 
 Said & Done is a command-line tool that reads a repo's Claude Code session history and its git log, and produces a **Build Story**: one self-contained HTML page showing every prompt, the files it touched, the commit it led to, and the totals. The page can replay the build as a timelapse, and the CLI can also output YouTube chapter markers and a "built by voice" README badge.
 
-It doesn't prove that prompts were spoken rather than typed. It makes the prompt history **visible and checkable**, and the screen recording is the proof of voice. The page says this plainly.
+In one line: **see the prompt behind every line of code.** Voice-built projects are the signature use case (the "built by voice" badge), but the core is prompt provenance for any repo built with an AI agent.
+
+It doesn't prove that prompts were spoken rather than typed. It makes the prompt history **visible and checkable**. The page says this plainly.
 
 ## 3. Goals and non-goals
 
 **Goals**
-1. Turn a repo's Claude Code sessions plus its git log into an accurate, readable Build Story with one command.
-2. Make the output safe to publish: redaction on by default, nothing loaded from the network.
-3. Produce extras for a demo video: replay, chapters and badge.
-4. Run on Said & Done's own repo as the payoff of the demo.
+1. Turn a repo's AI coding sessions plus its git log into an accurate, readable Build Story with one command (`npx said-and-done build`).
+2. Make the output safe to publish: redaction on by default, nothing loaded from the network, no telemetry.
+3. Answer "what was the prompt behind this?" at the level of a commit, a file and a line.
+4. Work on macOS, Linux and Windows, and across the major coding agents.
+5. Produce shareable extras: replay, chapters, badge and share card.
 
-**Non-goals (v1)**
+**Non-goals (1.0)**
 - Proving that a prompt was spoken. That's impossible from a transcript.
-- Coding agents other than Claude Code. The design leaves room for them; see [ARCHITECTURE.md](ARCHITECTURE.md).
-- Hosting, accounts or a server. The output is a static file.
+- Hosting, accounts or a server. Output is static files; sharing goes through GitHub Pages and the GitHub Action.
 - Editing or annotating stories in the browser.
-- Windows support. Best effort only; macOS and Linux are the targets.
+- Reverse-engineering private agent databases. Adapters read only documented or plainly readable local logs.
 
 ## 4. Users
 
 | User | Wants | Success looks like |
 |---|---|---|
-| **Voice builder** (primary; the entrant) | Shareable, credible evidence of how a project was built | Runs one command and gets a page worth linking from the README |
-| **Viewer / judge** | To understand quickly how the project came together | Sees in under 30 s what was asked for, what changed, and the totals; can check any card against a commit |
-| **Future maintainer** | To know *why* a change exists | Finds the prompt behind a commit |
+| **Builder** (primary; solo or indie, often voice) | Shareable, credible evidence of how a project was built | Runs one command and gets a page worth linking from the README |
+| **Reviewer / maintainer** | To see the prompts behind an AI-assisted change before merging | Sees in under 30 s what was asked for, what changed, and can check any card against a commit |
+| **Team lead / auditor** | To know *why* a change exists, or which prompt introduced a bug | Finds the prompt behind a commit, file or line |
+| **Viewer** | To understand quickly how the project came together | Reads the story, or watches the replay |
 
 ## 5. Core user flow
 
-1. The builder works in Claude Code (by voice, through Wispr Flow) and commits as they go.
+1. The builder works with an AI coding agent (often by voice, through Wispr Flow) and commits as they go.
 2. `said scan` prints a summary to check that the data looks right.
 3. `said build` writes `build-story.html` and prints a redaction preview.
 4. The builder opens the file (offline), checks it, and publishes it (for example on GitHub Pages).
@@ -140,16 +144,15 @@ Visual spec: [DESIGN.md](DESIGN.md).
 
 ## 9. Release scope
 
-- **Submission (Oct 5, P0 + P1):** FR-1 to FR-33, FR-35, FR-40 to FR-49, and all NFRs.
-- **Stretch (P2):** FR-34 (live hook).
-- **After the contest:** other agents' formats, search and filters on the page, and story diffs between two builds.
+- **v0.1.0 (shipped Oct 5, 2026):** FR-1 to FR-35, FR-40 to FR-49, and all NFRs.
+- **Next:** phased in [ROADMAP.md](ROADMAP.md) §7: foundations and npm release, Story page v2, agent adapters, `said blame`, git-notes provenance, the GitHub Action, then 1.0.
 
 ## 10. Success criteria
 
-1. On this repo, `said scan` agrees with a hand count of the recorded voice prompts, with the typed planning sessions excluded.
-2. A fresh clone, then `npm ci && npm run build`, then `said build` gives a working page in under 2 minutes.
+1. On this repo, `said scan` agrees with a hand count of the prompts, with the typed planning sessions excluded.
+2. `npx said-and-done build` in a fresh repo gives a working page in under 1 minute, on macOS, Linux and Windows.
 3. The Build Story of this repo is published on GitHub Pages and linked from the README.
-4. Every demo-video beat in [RECORDING.md](RECORDING.md) is captured.
+4. CI is green on every supported OS and Node version before each release.
 
 ## 11. Risks
 

@@ -24,7 +24,7 @@ const COMMANDS = {
   hook: { run: hook, help: HOOK_HELP },
 } as const;
 
-const HELP = `said — turn a voice-built repo into a replayable Build Story
+const HELP = `said — see the prompt behind every line of code
 
 Usage: said <command> [options]
 

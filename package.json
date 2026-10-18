@@ -1,7 +1,7 @@
 {
   "name": "said-and-done",
   "version": "0.1.0",
-  "description": "Turn a voice-built repo into a replayable Build Story.",
+  "description": "See the prompt behind every line of code: link AI coding-agent sessions to git history and render a Build Story.",
   "type": "module",
   "bin": {
     "said": "dist/cli.js"
