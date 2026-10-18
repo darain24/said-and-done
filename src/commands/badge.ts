@@ -5,10 +5,9 @@ import { relative, resolve } from "node:path";
 import { parseArgs } from "node:util";
 import type { Io } from "../cli.js";
 import { EXIT } from "../exit.js";
-import { findRepoRoot } from "../git/log.js";
 import { BADGE_LABEL, badgeSvg, promptCountText } from "../render/badge-svg.js";
 import { buildStoryFromRepo } from "../story/assemble.js";
-import { readFilters, STORY_OPTIONS, STORY_OPTIONS_HELP, UsageError } from "./options.js";
+import { readStoryArgs, STORY_OPTIONS, STORY_OPTIONS_HELP, UsageError } from "./options.js";
 
 export const BADGE_HELP = `Usage: said badge [options]
 
@@ -33,15 +32,15 @@ export async function badge(argv: string[], io: Io): Promise<number> {
     return EXIT.ok;
   }
 
-  const filters = readFilters(values);
+  const args = await readStoryArgs(values);
   const { story } = await buildStoryFromRepo({
-    repo: values.repo,
-    sessionsDir: values["sessions-dir"],
-    filters,
+    repo: args.repoRoot,
+    sessionsDir: args.sessionsDir,
+    filters: args.filters,
     redact: true,
   });
 
-  const out = resolve(values.out ?? "said-badge.svg");
+  const out = resolve(values.out ?? args.loaded.config.badgeOut ?? "said-badge.svg");
   try {
     await writeFile(out, badgeSvg(story.stats.prompts));
   } catch (error) {
@@ -49,9 +48,7 @@ export async function badge(argv: string[], io: Io): Promise<number> {
   }
 
   // The README sits at the repo root, so the image path is relative to that.
-  const fromReadme = relative(await findRepoRoot(values.repo ?? "."), out)
-    .split("\\")
-    .join("/");
+  const fromReadme = relative(args.repoRoot, out).split("\\").join("/");
   const count = promptCountText(story.stats.prompts);
   io.out(`Wrote ${out}  (${count})`);
   io.out("");

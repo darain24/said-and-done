@@ -9,7 +9,7 @@ import { REDACTION_KINDS, type RedactionHits } from "../redact.js";
 import { injectStory, readTemplate, TemplateError } from "../render/inject.js";
 import { buildStoryFromRepo } from "../story/assemble.js";
 import type { Story } from "../story/model.js";
-import { readFilters, STORY_OPTIONS, STORY_OPTIONS_HELP, UsageError } from "./options.js";
+import { readStoryArgs, STORY_OPTIONS, STORY_OPTIONS_HELP, UsageError } from "./options.js";
 
 export const BUILD_HELP = `Usage: said build [options]
 
@@ -42,18 +42,19 @@ export async function build(argv: string[], io: Io, templates?: URL[]): Promise<
     return EXIT.ok;
   }
 
-  const filters = readFilters(values);
+  const args = await readStoryArgs(values);
+  const { config } = args.loaded;
   // Read the template first, so a missing build fails before any work.
   const template = await readTemplate(templates);
   const { story, redactionHits } = await buildStoryFromRepo({
-    repo: values.repo,
-    sessionsDir: values["sessions-dir"],
-    filters,
+    repo: args.repoRoot,
+    sessionsDir: args.sessionsDir,
+    filters: args.filters,
     redact: values.redact,
-    title: values.title,
+    title: values.title ?? config.title,
   });
 
-  const out = resolve(values.out ?? "build-story.html");
+  const out = resolve(values.out ?? config.out ?? "build-story.html");
   try {
     await writeFile(out, injectStory(template, story));
   } catch (error) {

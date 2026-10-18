@@ -8,6 +8,7 @@ import { CHAPTERS_HELP, chapters } from "./commands/chapters.js";
 import { HOOK_HELP, hook } from "./commands/hook.js";
 import { UsageError } from "./commands/options.js";
 import { SCAN_HELP, scan } from "./commands/scan.js";
+import { ConfigError } from "./config.js";
 import { EXIT } from "./exit.js";
 import { GitError } from "./git/log.js";
 import { TemplateError } from "./render/inject.js";
@@ -77,6 +78,10 @@ export async function run(argv: string[], io: Io): Promise<number> {
       const code = (error as { code?: string }).code ?? "";
       if (error instanceof UsageError || code.startsWith("ERR_PARSE_ARGS")) {
         io.err(`${(error as Error).message}\n\n${help}`);
+        return EXIT.usage;
+      }
+      if (error instanceof ConfigError) {
+        io.err(error.message);
         return EXIT.usage;
       }
       if (error instanceof NoSessionsError) {

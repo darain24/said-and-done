@@ -58,9 +58,27 @@ Open `build-story.html` in any browser. It works offline from `file://`, so you 
 --since <ISO date>         Leave out prompts before this time
 --until <ISO date>         Leave out prompts after this time
 --exclude-session <id>     Leave out a session; repeatable, an id prefix is enough
+--config <path>            Read defaults from this file (default: said.config.json)
 ```
 
-Use `--since` or `--exclude-session` to drop planning sessions you typed before you started recording. Every command has `--help`.
+Use `--since` or `--exclude-session` to drop planning sessions you typed before you started. Every command has `--help`.
+
+### said.config.json
+
+Put the flags you always use in `said.config.json` at the repo root, and `said scan`, `build` and `badge` pick them up. Flags still win, and excluded sessions from both are combined. Relative paths are resolved against the file's folder.
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/darain24/said-and-done/main/said.config.schema.json",
+  "title": "Said & Done",
+  "excludeSessions": ["061228f9", "b877ca9b"],
+  "since": "2026-10-03T06:00:00Z",
+  "out": "site/build-story.html",
+  "badgeOut": "docs/said-badge.svg"
+}
+```
+
+A typo in a key is an error, not silently ignored.
 
 ## How it reads sessions
 
@@ -109,7 +127,7 @@ The only files not produced by voice are [`CLAUDE.md`](CLAUDE.md) and the origin
 The badge above was made by Said & Done from this repo's own sessions, with the typed planning sessions left out:
 
 ```bash
-said badge --exclude-session 061228f9 --exclude-session b877ca9b --out docs/said-badge.svg
+said badge    # this repo's said.config.json excludes the typed planning sessions
 ```
 
 To add one to your own project, run `said badge` and paste the line it prints into your README.

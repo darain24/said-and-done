@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/darain24/said-and-done/main/said.config.schema.json",
+  "title": "said.config.json",
+  "description": "Per-repo defaults for Said & Done. Command-line flags always win; excluded sessions from both are combined. Relative paths are resolved against this file's folder.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "title": { "type": "string", "description": "Page title (default: the repo name)" },
+    "sessionsDir": { "type": "string", "description": "Read session files from this folder instead of ~/.claude/projects" },
+    "since": { "type": "string", "description": "Leave out prompts before this ISO date or time" },
+    "until": { "type": "string", "description": "Leave out prompts after this ISO date or time" },
+    "excludeSessions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Session ids to leave out; an id prefix is enough"
+    },
+    "out": { "type": "string", "description": "Where said build writes the page (default: build-story.html)" },
+    "badgeOut": { "type": "string", "description": "Where said badge writes the badge (default: said-badge.svg)" }
+  }
+}

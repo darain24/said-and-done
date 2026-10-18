@@ -29,7 +29,8 @@
     "said": "dist/cli.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "said.config.schema.json"
   ],
   "engines": {
     "node": ">=22"

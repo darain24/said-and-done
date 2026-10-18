@@ -1,0 +1,6 @@
+{
+  "$schema": "./said.config.schema.json",
+  "title": "Said & Done",
+  "excludeSessions": ["061228f9", "b877ca9b"],
+  "badgeOut": "docs/said-badge.svg"
+}

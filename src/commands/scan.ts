@@ -7,7 +7,7 @@ import type { RedactionHits } from "../redact.js";
 import type { LocatedSessions } from "../sessions/locate.js";
 import { buildStoryFromRepo } from "../story/assemble.js";
 import type { Story } from "../story/model.js";
-import { readFilters, STORY_OPTIONS, STORY_OPTIONS_HELP } from "./options.js";
+import { readStoryArgs, STORY_OPTIONS, STORY_OPTIONS_HELP } from "./options.js";
 
 export const SCAN_HELP = `Usage: said scan [options]
 
@@ -31,11 +31,13 @@ export async function scan(argv: string[], io: Io): Promise<number> {
     return EXIT.ok;
   }
 
+  const args = await readStoryArgs(values);
   const { story, redactionHits, located } = await buildStoryFromRepo({
-    repo: values.repo,
-    sessionsDir: values["sessions-dir"],
-    filters: readFilters(values),
+    repo: args.repoRoot,
+    sessionsDir: args.sessionsDir,
+    filters: args.filters,
     redact: true,
+    title: args.loaded.config.title,
   });
 
   io.out(values.json ? JSON.stringify(story, null, 2) : formatScan(story, located, redactionHits).join("\n"));
