@@ -1,11 +1,16 @@
 // Builds throwaway git repos with fixed commit dates for tests.
 import { execFileSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, realpathSync, rmSync, writeFileSync } from "node:fs";
-import { devNull, tmpdir } from "node:os";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 
 // Isolate from the developer's own git config: no signing, hooks or templates.
-const ISOLATED = ["-c", "commit.gpgsign=false", "-c", `core.hooksPath=${devNull}`, "-c", "init.templateDir="];
+// An empty config file and hooks folder rather than /dev/null, which git on Windows can't open.
+const EMPTY = mkdtempSync(join(tmpdir(), "said-git-empty-"));
+const EMPTY_CONFIG = join(EMPTY, "gitconfig");
+writeFileSync(EMPTY_CONFIG, "");
+mkdirSync(join(EMPTY, "hooks"));
+const ISOLATED = ["-c", "commit.gpgsign=false", "-c", `core.hooksPath=${join(EMPTY, "hooks")}`, "-c", "init.templateDir="];
 
 export interface TempRepo {
   root: string;
@@ -22,7 +27,7 @@ export function makeTempRepo(): TempRepo {
     execFileSync("git", [...ISOLATED, ...args], {
       cwd: root,
       encoding: "utf8",
-      env: { ...process.env, GIT_CONFIG_GLOBAL: devNull, GIT_CONFIG_NOSYSTEM: "1", ...env },
+      env: { ...process.env, GIT_CONFIG_GLOBAL: EMPTY_CONFIG, GIT_CONFIG_NOSYSTEM: "1", ...env },
     }).trim();
 
   git(["init", "-q", "-b", "main"]);
