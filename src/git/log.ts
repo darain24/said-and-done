@@ -23,7 +23,10 @@ export interface GitCommit {
 
 /** git is missing, or a git command failed (exit code 3, ARCHITECTURE §11). */
 export class GitError extends Error {
-  constructor(message: string, readonly exitCode?: number) {
+  constructor(
+    message: string,
+    readonly exitCode?: number,
+  ) {
     super(message);
   }
 }
@@ -61,7 +64,10 @@ export async function readGitLog(repoRoot: string): Promise<GitCommit[]> {
   if (!(await hasCommits(repoRoot))) return [];
   // --no-renames: a rename shows as a delete plus an add, so paths need no parsing.
   const out = await git(repoRoot, ["log", "--reverse", "--no-renames", "--numstat", `--format=${RECORD}%H${FIELD}%cI${FIELD}%s`]);
-  return out.split(RECORD).filter((record) => record.trim() !== "").map(parseRecord);
+  return out
+    .split(RECORD)
+    .filter((record) => record.trim() !== "")
+    .map(parseRecord);
 }
 
 function parseRecord(record: string): GitCommit {

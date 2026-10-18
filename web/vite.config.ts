@@ -5,16 +5,13 @@ import { viteSingleFile } from "vite-plugin-singlefile";
 
 // NFR-1: the built page can't reach the network. Added at build time only,
 // because it would also block the dev server's own scripts and HMR socket.
-const CSP =
-  "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'";
+const CSP = "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'";
 
 function contentSecurityPolicy(): Plugin {
   return {
     name: "said-csp",
     apply: "build",
-    transformIndexHtml: () => [
-      { tag: "meta", attrs: { "http-equiv": "Content-Security-Policy", content: CSP }, injectTo: "head-prepend" },
-    ],
+    transformIndexHtml: () => [{ tag: "meta", attrs: { "http-equiv": "Content-Security-Policy", content: CSP }, injectTo: "head-prepend" }],
   };
 }
 

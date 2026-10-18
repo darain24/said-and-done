@@ -28,10 +28,7 @@ export function injectStory(template: string, story: Story): string {
 
 // Built: dist/render/inject.js → dist/story-template.html.
 // From source: src/render/inject.ts → dist/story-template.html.
-const TEMPLATE_CANDIDATES = [
-  new URL("../story-template.html", import.meta.url),
-  new URL("../../dist/story-template.html", import.meta.url),
-];
+const TEMPLATE_CANDIDATES = [new URL("../story-template.html", import.meta.url), new URL("../../dist/story-template.html", import.meta.url)];
 
 export async function readTemplate(candidates: URL[] = TEMPLATE_CANDIDATES): Promise<string> {
   for (const url of candidates) {

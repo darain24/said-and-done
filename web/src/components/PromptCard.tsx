@@ -67,6 +67,7 @@ export function PromptCard({ prompt, showDay = false, replay }: PromptCardProps)
   const [overflows, setOverflows] = useState(false);
 
   // Only offer "Show full prompt" when the clamp actually hides something.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: re-measure when the text changes.
   useLayoutEffect(() => {
     const el = textRef.current;
     if (!el || expanded) return;

@@ -50,7 +50,7 @@ export async function run(argv: string[], io: Io): Promise<number> {
   const [command, ...rest] = argv;
 
   if (command === undefined || command.startsWith("-")) {
-    let values;
+    let values: { help?: boolean; version?: boolean };
     try {
       ({ values } = parseArgs({
         args: argv,

@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import { appendFileSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { pathToFileURL } from "node:url";
 import { test } from "node:test";
+import { pathToFileURL } from "node:url";
 import { EXIT, run } from "../src/cli.js";
 import { build } from "../src/commands/build.js";
 import { TemplateError } from "../src/render/inject.js";
@@ -23,15 +23,22 @@ function setup(t: Parameters<typeof sessionsFixture>[0]) {
   const template = join(dir, "story-template.html");
   writeFileSync(template, TEMPLATE);
   // One more spoken prompt, trying to close the data tag.
-  appendFileSync(join(f.sessions, "voice.jsonl"), `\n${JSON.stringify({
-    type: "user", sessionId: "voice-1111", cwd: f.repo.root, timestamp: "2026-10-04T10:30:00.000Z",
-    uuid: crypto.randomUUID(), promptId: crypto.randomUUID(), message: { role: "user", content: BREAKOUT },
-  })}`);
+  appendFileSync(
+    join(f.sessions, "voice.jsonl"),
+    `\n${JSON.stringify({
+      type: "user",
+      sessionId: "voice-1111",
+      cwd: f.repo.root,
+      timestamp: "2026-10-04T10:30:00.000Z",
+      uuid: crypto.randomUUID(),
+      promptId: crypto.randomUUID(),
+      message: { role: "user", content: BREAKOUT },
+    })}`,
+  );
   return { ...f, out: join(dir, "story.html"), templates: [pathToFileURL(template)] };
 }
 
-const readStory = (html: string) =>
-  JSON.parse(/<script id="story-data" type="application\/json">([\s\S]*?)<\/script>/.exec(html)![1]!) as Story;
+const readStory = (html: string) => JSON.parse(/<script id="story-data" type="application\/json">([\s\S]*?)<\/script>/.exec(html)![1]!) as Story;
 
 test("FR-31: build writes the page with the story injected and safe", async (t) => {
   const { flags, out, templates } = setup(t);

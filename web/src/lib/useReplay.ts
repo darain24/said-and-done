@@ -1,7 +1,7 @@
 // useReplay (FR-47, DESIGN §6): cursor, playing, speed and the tick timer.
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Story } from "../../../src/story/model";
-import { tickMs, type Speed } from "./replay";
+import { type Speed, tickMs } from "./replay";
 import { useMediaQuery } from "./useMediaQuery";
 
 const START_DELAY_MS = 400;
@@ -46,7 +46,7 @@ export function useReplay(story: Story): Replay {
   const reducedMotion = useMediaQuery(REDUCED_MOTION);
   const finished = active && cursor >= total;
 
-  const cancelStart = () => window.clearTimeout(startTimer.current);
+  const cancelStart = useCallback(() => window.clearTimeout(startTimer.current), []);
 
   const seek = useCallback(
     (next: number) => {
@@ -54,7 +54,7 @@ export function useReplay(story: Story): Replay {
       setCursor(Math.min(total, Math.max(0, next)));
       if (next >= total) setPlaying(false);
     },
-    [total],
+    [total, cancelStart],
   );
 
   const start = useCallback(() => {
@@ -63,14 +63,14 @@ export function useReplay(story: Story): Replay {
     setCursor(0);
     setPlaying(false);
     startTimer.current = window.setTimeout(() => setPlaying(true), START_DELAY_MS);
-  }, []);
+  }, [cancelStart]);
 
   const exit = useCallback(() => {
     cancelStart();
     setActive(false);
     setPlaying(false);
     document.getElementById("replay-button")?.focus({ preventScroll: true });
-  }, []);
+  }, [cancelStart]);
 
   const toggle = useCallback(() => {
     cancelStart();
@@ -80,7 +80,7 @@ export function useReplay(story: Story): Replay {
     } else {
       setPlaying((p) => !p);
     }
-  }, [cursor, total]);
+  }, [cursor, total, cancelStart]);
 
   // The tick: from prompt 0 the first card appears at once; after that each
   // card stays current for its tick length.
@@ -120,7 +120,7 @@ export function useReplay(story: Story): Replay {
     return () => window.removeEventListener("keydown", onKey);
   }, [active, cursor, toggle, seek, exit]);
 
-  useEffect(() => cancelStart, []);
+  useEffect(() => cancelStart, [cancelStart]);
 
   return { active, cursor, total, playing, finished, speed, start, exit, toggle, seek, setSpeed };
 }

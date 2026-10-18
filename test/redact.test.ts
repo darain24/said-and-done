@@ -7,14 +7,14 @@ import { type RedactionKind, redactText } from "../src/redact.js";
 const body = (n: number) => "Ab3dE5gH7jK9mN2pQ4rS6tV8wX0yZ1cF".repeat(4).slice(0, n);
 
 const mustRedact: [name: string, input: string, expected: string, kind: RedactionKind][] = [
-  ["Anthropic key", `my key is ${"sk-" + "ant-api03-" + body(40)}`, "my key is [redacted:key]", "key"],
-  ["OpenAI project key", `use ${"sk-" + "proj-" + body(40)} here`, "use [redacted:key] here", "key"],
-  ["GitHub token", "gh" + "p_" + body(36), "[redacted:key]", "key"],
-  ["GitHub fine-grained token", "github" + "_pat_" + body(40), "[redacted:key]", "key"],
-  ["Slack token", "xo" + "xb-1234567890-" + body(20), "[redacted:key]", "key"],
+  ["Anthropic key", `my key is ${`sk-ant-api03-${body(40)}`}`, "my key is [redacted:key]", "key"],
+  ["OpenAI project key", `use ${`sk-proj-${body(40)}`} here`, "use [redacted:key] here", "key"],
+  ["GitHub token", `ghp_${body(36)}`, "[redacted:key]", "key"],
+  ["GitHub fine-grained token", `github_pat_${body(40)}`, "[redacted:key]", "key"],
+  ["Slack token", `xoxb-1234567890-${body(20)}`, "[redacted:key]", "key"],
   ["AWS access key (AWS docs example)", "AK" + "IAIOSFODNN7EXAMPLE", "[redacted:key]", "key"],
-  ["Google API key", "AI" + "za" + body(35), "[redacted:key]", "key"],
-  ["JWT", `Bearer ${"ey" + "J" + body(20)}.${"ey" + "J" + body(20)}.${body(20)}`, "Bearer [redacted:key]", "key"],
+  ["Google API key", `AIza${body(35)}`, "[redacted:key]", "key"],
+  ["JWT", `Bearer ${`eyJ${body(20)}`}.${`eyJ${body(20)}`}.${body(20)}`, "Bearer [redacted:key]", "key"],
   ["env assignment", "ANTHROPIC_API_KEY=whatever123", "ANTHROPIC_API_KEY=[redacted:key]", "key"],
   ["quoted yaml value", 'DB_PASSWORD: "hunter2"', 'DB_PASSWORD: "[redacted:key]"', "key"],
   ["CLI flag", "said build --token=abc123xyz", "said build --token=[redacted:key]", "key"],
@@ -69,7 +69,7 @@ for (const [name, input] of mustKeep) {
 }
 
 test("FR-20: counts hits per kind", () => {
-  const input = `a@example.com b@example.com /Users/jane/x 10.0.0.1 ${"gh" + "p_" + body(36)}`;
+  const input = `a@example.com b@example.com /Users/jane/x 10.0.0.1 ${`ghp_${body(36)}`}`;
   const { hits } = redactText(input);
   assert.deepEqual(hits, { key: 1, secret: 0, email: 2, home: 1, ip: 1 });
 });

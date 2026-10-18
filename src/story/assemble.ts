@@ -2,8 +2,8 @@
 // filter (FR-6) → redact (FR-20) → correlate (FR-11) → number → stats,
 // so filtered prompts affect nothing and nothing unredacted reaches the story.
 import { basename } from "node:path";
-import { type GitCommit, findRepoRoot, readGitLog, readRemoteUrl } from "../git/log.js";
-import { type RedactionHits, REDACTION_KINDS, redactText } from "../redact.js";
+import { findRepoRoot, type GitCommit, readGitLog, readRemoteUrl } from "../git/log.js";
+import { REDACTION_KINDS, type RedactionHits, redactText } from "../redact.js";
 import { type LocatedSessions, locateSessions } from "../sessions/locate.js";
 import { type ParseResult, parseSessionFiles } from "../sessions/parse.js";
 import { version } from "../version.js";
@@ -133,11 +133,7 @@ export interface BuildOptions {
 export async function buildStoryFromRepo(options: BuildOptions): Promise<Assembled & { located: LocatedSessions }> {
   const repoRoot = await findRepoRoot(options.repo ?? ".");
   const located = await locateSessions({ repoRoot, sessionsDir: options.sessionsDir, projectsDir: options.projectsDir });
-  const [parsed, commits, remoteUrl] = await Promise.all([
-    parseSessionFiles(located.files, repoRoot),
-    readGitLog(repoRoot),
-    readRemoteUrl(repoRoot),
-  ]);
+  const [parsed, commits, remoteUrl] = await Promise.all([parseSessionFiles(located.files, repoRoot), readGitLog(repoRoot), readRemoteUrl(repoRoot)]);
   const assembled = assembleStory({
     repoName: basename(repoRoot),
     remoteUrl,

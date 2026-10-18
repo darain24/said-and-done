@@ -27,18 +27,24 @@ export function sessionsFixture(t: { after: (fn: () => void) => void }) {
   const prompt = (sessionId: string, at: string, text: string) =>
     line(sessionId, at, { type: "user", promptId: crypto.randomUUID(), message: { role: "user", content: text } });
   const write = (at: string, file: string) =>
-    line("voice-1111", at, { type: "assistant", message: { role: "assistant", content: [{ type: "tool_use", id: crypto.randomUUID(), name: "Write", input: { file_path: join(repo.root, file) } }] } });
+    line("voice-1111", at, {
+      type: "assistant",
+      message: { role: "assistant", content: [{ type: "tool_use", id: crypto.randomUUID(), name: "Write", input: { file_path: join(repo.root, file) } }] },
+    });
 
-  writeFileSync(join(sessions, "typed.jsonl"), [
-    prompt("typed-2222", "09:00:00.000", "planning notes, typed"),
-    JSON.stringify({ type: "custom-title" }),
-  ].join("\n"));
-  writeFileSync(join(sessions, "voice.jsonl"), [
-    prompt("voice-1111", "10:00:00.000", "Add a CLI that says hello to jane@example.com"),
-    write("10:01:00.000", "src/cli.ts"),
-    "{broken",
-    prompt("voice-1111", "10:20:00.000", "Now add tests"),
-  ].join("\n"));
+  writeFileSync(
+    join(sessions, "typed.jsonl"),
+    [prompt("typed-2222", "09:00:00.000", "planning notes, typed"), JSON.stringify({ type: "custom-title" })].join("\n"),
+  );
+  writeFileSync(
+    join(sessions, "voice.jsonl"),
+    [
+      prompt("voice-1111", "10:00:00.000", "Add a CLI that says hello to jane@example.com"),
+      write("10:01:00.000", "src/cli.ts"),
+      "{broken",
+      prompt("voice-1111", "10:20:00.000", "Now add tests"),
+    ].join("\n"),
+  );
 
   return { repo, sessions, sha, flags: ["--repo", repo.root, "--sessions-dir", sessions] };
 }

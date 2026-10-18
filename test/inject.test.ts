@@ -31,8 +31,15 @@ function storyWith(...texts: string[]): Story {
     })),
     commits: [],
     stats: {
-      prompts: texts.length, words: 0, sessions: 1, commits: 0, filesTouched: 0, activeMs: 0,
-      firstPromptToFirstCommitMs: null, longestPrompt: null, typingSavedMs: 0,
+      prompts: texts.length,
+      words: 0,
+      sessions: 1,
+      commits: 0,
+      filesTouched: 0,
+      activeMs: 0,
+      firstPromptToFirstCommitMs: null,
+      longestPrompt: null,
+      typingSavedMs: 0,
     },
     diagnostics: {} as Story["diagnostics"],
   };

@@ -30,7 +30,6 @@ export interface FileTouch {
   tool: string;
 }
 
-
 export interface ParseResult {
   prompts: RawPrompt[];
   touches: FileTouch[];
@@ -77,8 +76,19 @@ export function createParser(repoRoot: string) {
   const seenTouches = new Set<string>();
   const lastPromptBySession = new Map<string, string>();
   const d: ParseDiagnostics = {
-    files: 0, lines: 0, malformed: 0, ignoredByType: {}, sidechain: 0, outOfRepo: 0, meta: 0,
-    toolResults: 0, wrappers: 0, empty: 0, duplicatePrompts: 0, touchesOutsideRepo: 0, touchesWithoutPrompt: 0,
+    files: 0,
+    lines: 0,
+    malformed: 0,
+    ignoredByType: {},
+    sidechain: 0,
+    outOfRepo: 0,
+    meta: 0,
+    toolResults: 0,
+    wrappers: 0,
+    empty: 0,
+    duplicatePrompts: 0,
+    touchesOutsideRepo: 0,
+    touchesWithoutPrompt: 0,
   };
 
   function line(raw: string): void {
@@ -174,7 +184,12 @@ export function createParser(repoRoot: string) {
     }
     seenPrompts.add(id);
     prompts.push({
-      id, uuid, sessionId, at, text: clean, images,
+      id,
+      uuid,
+      sessionId,
+      at,
+      text: clean,
+      images,
       ...(typeof entry.promptSource === "string" ? { source: entry.promptSource } : {}),
     });
   }

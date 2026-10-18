@@ -50,7 +50,10 @@ test("FR-30: --json prints the story", async (t) => {
   const story = JSON.parse(c.out.join("\n")) as Story;
   assert.equal(story.schemaVersion, 1);
   assert.equal(story.prompts.length, 3);
-  assert.deepEqual(story.commits.map((c) => c.subject), ["Before recording", "Add the CLI"]);
+  assert.deepEqual(
+    story.commits.map((c) => c.subject),
+    ["Before recording", "Add the CLI"],
+  );
 });
 
 test("FR-35: scan's usage errors and exit codes", async (t) => {

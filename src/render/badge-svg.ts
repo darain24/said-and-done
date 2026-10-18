@@ -17,8 +17,7 @@ export const promptCountText = (prompts: number) => `${formatCount(prompts)} ${p
 
 const segmentWidth = (text: string) => text.length * CHAR_WIDTH + 2 * PADDING;
 
-const escapeXml = (text: string) =>
-  text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const escapeXml = (text: string) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 export function badgeSvg(prompts: number): string {
   const value = promptCountText(prompts);
@@ -27,8 +26,7 @@ export function badgeSvg(prompts: number): string {
   const width = left + right;
   const title = escapeXml(`${BADGE_LABEL}: ${value}`);
   const text = (x: number, content: string) =>
-    `<text x="${x}" y="15" fill="#010101" fill-opacity=".3">${escapeXml(content)}</text>` +
-    `<text x="${x}" y="14">${escapeXml(content)}</text>`;
+    `<text x="${x}" y="15" fill="#010101" fill-opacity=".3">${escapeXml(content)}</text>` + `<text x="${x}" y="14">${escapeXml(content)}</text>`;
 
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${HEIGHT}" viewBox="0 0 ${width} ${HEIGHT}" role="img" aria-label="${title}">`,

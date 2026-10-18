@@ -28,11 +28,7 @@ export const encodeProjectPath = (repoRoot: string) => repoRoot.replace(/[^A-Za-
 
 const FALLBACK_LINES = 50;
 
-export async function locateSessions(options: {
-  repoRoot: string;
-  sessionsDir?: string;
-  projectsDir?: string;
-}): Promise<LocatedSessions> {
+export async function locateSessions(options: { repoRoot: string; sessionsDir?: string; projectsDir?: string }): Promise<LocatedSessions> {
   if (options.sessionsDir !== undefined) {
     const dir = resolve(options.sessionsDir);
     return found(await jsonlFiles(dir), "sessions dir", [dir]);
@@ -61,7 +57,10 @@ function found(files: string[], how: LocatedSessions["how"], searched: string[])
 async function jsonlFiles(dir: string): Promise<string[]> {
   try {
     const entries = await readdir(dir, { withFileTypes: true });
-    return entries.filter((e) => e.isFile() && e.name.endsWith(".jsonl")).map((e) => join(dir, e.name)).sort();
+    return entries
+      .filter((e) => e.isFile() && e.name.endsWith(".jsonl"))
+      .map((e) => join(dir, e.name))
+      .sort();
   } catch {
     return [];
   }
@@ -70,7 +69,10 @@ async function jsonlFiles(dir: string): Promise<string[]> {
 async function subfolders(dir: string): Promise<string[]> {
   try {
     const entries = await readdir(dir, { withFileTypes: true });
-    return entries.filter((e) => e.isDirectory()).map((e) => join(dir, e.name)).sort();
+    return entries
+      .filter((e) => e.isDirectory())
+      .map((e) => join(dir, e.name))
+      .sort();
   } catch {
     return [];
   }

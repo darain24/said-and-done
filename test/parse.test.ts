@@ -73,7 +73,10 @@ test("FR-7: reading the same sessions twice gives the same story", async () => {
   assert.deepEqual(twice.prompts, once.prompts);
   assert.deepEqual(twice.touches, once.touches);
   assert.equal(twice.diagnostics.duplicatePrompts, once.prompts.length);
-  assert.deepEqual(once.prompts.map((p) => p.at), [...once.prompts.map((p) => p.at)].sort());
+  assert.deepEqual(
+    once.prompts.map((p) => p.at),
+    [...once.prompts.map((p) => p.at)].sort(),
+  );
 });
 
 test("NFR-7: fixtures contain nothing left to redact", () => {
@@ -92,7 +95,12 @@ test("FR-5: odd and excluded entries are counted, never thrown", () => {
   const user = (content: unknown, extra: object = {}) =>
     JSON.stringify({ ...base, type: "user", uuid: crypto.randomUUID(), message: { role: "user", content }, ...extra });
   const edit = (file_path: string, extra: object = {}) =>
-    JSON.stringify({ ...base, type: "assistant", message: { role: "assistant", content: [{ type: "tool_use", name: "Edit", input: { file_path } }] }, ...extra });
+    JSON.stringify({
+      ...base,
+      type: "assistant",
+      message: { role: "assistant", content: [{ type: "tool_use", name: "Edit", input: { file_path } }] },
+      ...extra,
+    });
 
   const parser = createParser(root);
   for (const line of [
@@ -112,15 +120,22 @@ test("FR-5: odd and excluded entries are counted, never thrown", () => {
     edit("/etc/hosts"),
     user('<pasted_content id="6eb9">\nDescribe the UI:\n* A header\n</pasted_content id="6eb9">', { promptId: "p3" }),
     "",
-  ]) parser.line(line);
+  ])
+    parser.line(line);
   const { prompts, touches, diagnostics: d } = parser.finish();
 
-  assert.deepEqual(prompts.map((p) => [p.id, p.text, p.images]), [
-    ["p1", "Look at this  screenshot", 1],
-    ["p2", "a later prompt", 0],
-    ["p3", "Describe the UI:\n* A header", 0],
-  ]);
-  assert.deepEqual(touches.map((t) => [t.promptId, t.path]), [["p2", "web/lib/util.ts"]]);
+  assert.deepEqual(
+    prompts.map((p) => [p.id, p.text, p.images]),
+    [
+      ["p1", "Look at this  screenshot", 1],
+      ["p2", "a later prompt", 0],
+      ["p3", "Describe the UI:\n* A header", 0],
+    ],
+  );
+  assert.deepEqual(
+    touches.map((t) => [t.promptId, t.path]),
+    [["p2", "web/lib/util.ts"]],
+  );
   assert.deepEqual(
     { lines: d.lines, malformed: d.malformed, sidechain: d.sidechain, outOfRepo: d.outOfRepo, wrappers: d.wrappers, empty: d.empty },
     { lines: 15, malformed: 2, sidechain: 1, outOfRepo: 2, wrappers: 2, empty: 1 },

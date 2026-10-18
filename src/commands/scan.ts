@@ -63,7 +63,9 @@ export function formatScan(story: Story, located: LocatedSessions, hits: Redacti
   if (story.sessions.length > 0) {
     out.push("", "Sessions");
     for (const s of story.sessions) {
-      out.push(`  ${s.id.slice(0, 8)}   ${formatTime(s.start, timeZone)} → ${formatTime(s.end, timeZone)}   ${s.promptCount} ${s.promptCount === 1 ? "prompt" : "prompts"}`);
+      out.push(
+        `  ${s.id.slice(0, 8)}   ${formatTime(s.start, timeZone)} → ${formatTime(s.end, timeZone)}   ${s.promptCount} ${s.promptCount === 1 ? "prompt" : "prompts"}`,
+      );
     }
   }
 
@@ -87,14 +89,25 @@ export function formatScan(story: Story, located: LocatedSessions, hits: Redacti
   out.push("", "Skipped while reading");
   const types = Object.entries(d.ignoredByType).sort((a, b) => b[1] - a[1]);
   const typeTotal = types.reduce((sum, [, n]) => sum + n, 0);
-  out.push(row("Unrecognised entry types", formatCount(typeTotal), types.slice(0, 4).map(([t, n]) => `${t} ${n}`).join(", ") + (types.length > 4 ? ", …" : "")));
+  out.push(
+    row(
+      "Unrecognised entry types",
+      formatCount(typeTotal),
+      types
+        .slice(0, 4)
+        .map(([t, n]) => `${t} ${n}`)
+        .join(", ") + (types.length > 4 ? ", …" : ""),
+    ),
+  );
   out.push(row("Malformed lines", formatCount(d.malformed)));
   out.push(row("Outside this repo", formatCount(d.outOfRepo)));
   out.push(row("Tool results", formatCount(d.toolResults)));
   out.push(row("Commands and system text", formatCount(d.wrappers + d.meta + d.empty)));
   out.push(row("Sub-agent (sidechain)", formatCount(d.sidechain)));
 
-  const redacted = Object.entries(hits).filter(([, n]) => n > 0).map(([kind, n]) => `${kind} ${n}`);
+  const redacted = Object.entries(hits)
+    .filter(([, n]) => n > 0)
+    .map(([kind, n]) => `${kind} ${n}`);
   out.push("", `Redacted: ${redacted.length > 0 ? redacted.join(", ") : "nothing found"}`);
   return out;
 }

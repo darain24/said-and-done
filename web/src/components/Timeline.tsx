@@ -13,9 +13,7 @@ function heading(group: TimelineGroup): string {
   const [startDay, endDay] = [formatDay(session.start), formatDay(session.end)];
   const [startTime, endTime] = [formatClock(session.start), formatClock(session.end)];
   const span =
-    startDay !== endDay
-      ? [`${startDay} ${startTime} – ${endDay} ${endTime}`]
-      : [startDay, startTime === endTime ? startTime : `${startTime}–${endTime}`];
+    startDay !== endDay ? [`${startDay} ${startTime} – ${endDay} ${endTime}`] : [startDay, startTime === endTime ? startTime : `${startTime}–${endTime}`];
   return [`Session ${number}`, ...span, plural(session.promptCount, "prompt")].join(" · ");
 }
 
@@ -78,7 +76,8 @@ export function EmptyState() {
         No prompts found
       </h2>
       <p className="mt-2 text-base text-muted">
-        Check the --since and --exclude-session filters, or run <code className="rounded-md bg-sunken px-1.5 font-mono text-[13px] text-ink">said scan</code> in the repo you recorded.
+        Check the --since and --exclude-session filters, or run <code className="rounded-md bg-sunken px-1.5 font-mono text-[13px] text-ink">said scan</code> in
+        the repo you recorded.
       </p>
     </section>
   );

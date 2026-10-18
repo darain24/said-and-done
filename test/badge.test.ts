@@ -65,12 +65,7 @@ test("FR-33: said badge writes the SVG and prints the README line", async (t) =>
 
   assert.equal(await run(["badge", ...flags, "--out", out], c.io), EXIT.ok);
   assert.equal(readFileSync(out, "utf8"), badgeSvg(3));
-  assert.deepEqual(c.out, [
-    `Wrote ${out}  (3 prompts)`,
-    "",
-    "Add this line to your README:",
-    "  ![built by voice: 3 prompts](docs/said-badge.svg)",
-  ]);
+  assert.deepEqual(c.out, [`Wrote ${out}  (3 prompts)`, "", "Add this line to your README:", "  ![built by voice: 3 prompts](docs/said-badge.svg)"]);
 });
 
 test("FR-33: said badge uses the same filters as scan", async (t) => {

@@ -16,7 +16,12 @@ export function formatDuration(ms: number): string {
 /** "Oct 3, 11:42" in the given time zone (default: this machine's). */
 export function formatTime(iso: string, timeZone?: string): string {
   return new Intl.DateTimeFormat("en-US", {
-    month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", hourCycle: "h23", timeZone,
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+    timeZone,
   }).format(new Date(iso));
 }
 

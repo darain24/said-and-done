@@ -7,7 +7,10 @@ const SPEAKING_WPM = 150;
 
 /** Whitespace-separated tokens, not counting redaction placeholders. */
 export function countWords(text: string): number {
-  return text.replace(/\[redacted:[a-z]+\]/g, " ").split(/\s+/).filter(Boolean).length;
+  return text
+    .replace(/\[redacted:[a-z]+\]/g, " ")
+    .split(/\s+/)
+    .filter(Boolean).length;
 }
 
 export function computeStats(prompts: Prompt[], commits: Commit[]): Stats {

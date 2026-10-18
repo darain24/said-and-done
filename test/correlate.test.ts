@@ -7,8 +7,12 @@ import { makeTempRepo } from "./helpers/git-repo.js";
 const prompt = (id: string, at: string) => ({ id, at: `2026-10-04T${at}Z` });
 const touch = (promptId: string, path: string) => ({ promptId, path });
 const commit = (sha: string, at: string, paths: string[]): GitCommit => ({
-  sha, at: `2026-10-04T${at}Z`, subject: sha,
-  files: paths.map((path) => ({ path, added: 1, removed: 0 })), added: paths.length, removed: 0,
+  sha,
+  at: `2026-10-04T${at}Z`,
+  subject: sha,
+  files: paths.map((path) => ({ path, added: 1, removed: 0 })),
+  added: paths.length,
+  removed: 0,
 });
 
 /** "sha: confidence [prompt ids]" per commit, plus "uncommitted [ids]". */

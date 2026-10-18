@@ -20,12 +20,18 @@ test("FR-10: reads commits oldest first with per-file line stats", async (t) => 
 
   const log = await readGitLog(repo.root);
 
-  assert.deepEqual(log.map((c) => [c.sha, c.subject]), [
-    [first, "Add readme"],
-    [second, "Edit readme, add cli and logo"],
-    [log[2]!.sha, "Remove readme"],
-  ]);
-  assert.deepEqual(log.map((c) => c.at), ["2026-10-04T04:30:00.000Z", "2026-10-04T05:00:00.000Z", "2026-10-04T11:00:00.000Z"]);
+  assert.deepEqual(
+    log.map((c) => [c.sha, c.subject]),
+    [
+      [first, "Add readme"],
+      [second, "Edit readme, add cli and logo"],
+      [log[2]!.sha, "Remove readme"],
+    ],
+  );
+  assert.deepEqual(
+    log.map((c) => c.at),
+    ["2026-10-04T04:30:00.000Z", "2026-10-04T05:00:00.000Z", "2026-10-04T11:00:00.000Z"],
+  );
   assert.deepEqual(log[1]!.files, [
     { path: "README.md", added: 2, removed: 1 },
     { path: "logo.png", added: 0, removed: 0 }, // binary

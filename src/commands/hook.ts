@@ -42,8 +42,7 @@ interface HookGroup {
 }
 type Settings = Record<string, unknown>;
 
-const isObject = (value: unknown): value is Record<string, unknown> =>
-  typeof value === "object" && value !== null && !Array.isArray(value);
+const isObject = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);
 
 /** The UserPromptSubmit groups, checking the shape on the way so we never rewrite a file we don't understand. */
 function eventGroups(settings: Settings): HookGroup[] | undefined {

@@ -16,7 +16,10 @@ function DiffStat({ added, removed }: { added: number; removed: number }) {
   return (
     <span aria-hidden="true" className="flex gap-0.5">
       {Array.from({ length: SQUARES }, (_, i) => (
-        <span key={i} className={i < adds ? "size-2.5 rounded-[2px] bg-add" : i < adds + dels ? "size-2.5 rounded-[2px] bg-del" : "size-2.5 rounded-[2px] bg-line"} />
+        <span
+          key={i}
+          className={i < adds ? "size-2.5 rounded-[2px] bg-add" : i < adds + dels ? "size-2.5 rounded-[2px] bg-del" : "size-2.5 rounded-[2px] bg-line"}
+        />
       ))}
     </span>
   );

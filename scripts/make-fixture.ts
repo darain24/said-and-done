@@ -7,11 +7,24 @@
 // file contents are dropped, long text is shortened, and every string goes
 // through redactText (CLAUDE.md: never commit raw session data).
 import { readFileSync, writeFileSync } from "node:fs";
-import { type RedactionHits, REDACTION_KINDS, redactText } from "../src/redact.js";
+import { REDACTION_KINDS, type RedactionHits, redactText } from "../src/redact.js";
 
 const KEEP_FIELDS = [
-  "type", "uuid", "parentUuid", "sessionId", "timestamp", "cwd", "gitBranch", "isSidechain",
-  "isMeta", "userType", "promptId", "promptSource", "origin", "relocatedCwd", "message",
+  "type",
+  "uuid",
+  "parentUuid",
+  "sessionId",
+  "timestamp",
+  "cwd",
+  "gitBranch",
+  "isSidechain",
+  "isMeta",
+  "userType",
+  "promptId",
+  "promptSource",
+  "origin",
+  "relocatedCwd",
+  "message",
 ];
 const EDIT_TOOLS = new Set(["Edit", "Write", "MultiEdit", "NotebookEdit"]);
 const MAX_TEXT = 300;
@@ -66,11 +79,12 @@ function trimEntry(entry: Obj): Obj {
     const content = message.content;
     out.message = {
       role,
-      content: typeof content === "string"
-        ? shorten(content)
-        : Array.isArray(content)
-          ? content.map((b) => trimBlock(b as Obj, role)).filter((b): b is Obj => b !== null)
-          : null,
+      content:
+        typeof content === "string"
+          ? shorten(content)
+          : Array.isArray(content)
+            ? content.map((b) => trimBlock(b as Obj, role)).filter((b): b is Obj => b !== null)
+            : null,
     };
   }
   return out;

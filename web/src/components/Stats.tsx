@@ -50,8 +50,7 @@ export function Stats({ stats, live = stats }: { stats: StoryStats; live?: Story
       </dl>
       <ul className="mt-5 flex flex-col gap-1 text-sm text-muted md:flex-row md:flex-wrap md:gap-x-6">
         <li>
-          First prompt → first commit{" "}
-          <Value>{stats.firstPromptToFirstCommitMs === null ? "—" : formatDuration(stats.firstPromptToFirstCommitMs)}</Value>
+          First prompt → first commit <Value>{stats.firstPromptToFirstCommitMs === null ? "—" : formatDuration(stats.firstPromptToFirstCommitMs)}</Value>
         </li>
         {stats.longestPrompt && (
           <li>
@@ -65,8 +64,7 @@ export function Stats({ stats, live = stats }: { stats: StoryStats; live?: Story
           </li>
         )}
         <li>
-          ≈ <Value>{formatDuration(stats.typingSavedMs)}</Value> typing saved{" "}
-          <span>(estimate: typing at 40 wpm vs speaking at 150 wpm)</span>
+          ≈ <Value>{formatDuration(stats.typingSavedMs)}</Value> typing saved <span>(estimate: typing at 40 wpm vs speaking at 150 wpm)</span>
         </li>
       </ul>
     </section>

@@ -1,5 +1,5 @@
 // ReplayBar (FR-47, DESIGN §4.7, §6): play/pause, progress, position, speed and exit.
-import { useEffect, useRef, type KeyboardEvent, type MouseEvent } from "react";
+import { type KeyboardEvent, type MouseEvent, useEffect, useRef } from "react";
 import { formatCount } from "../lib/format";
 import { SPEEDS, type Speed } from "../lib/replay";
 import type { Replay } from "../lib/useReplay";
@@ -50,7 +50,10 @@ function Progress({ cursor, total, seek }: Pick<Replay, "cursor" | "total" | "se
       className={`order-last flex h-8 basis-full cursor-pointer items-center rounded-md md:order-none md:h-11 md:flex-1 md:basis-auto ${FOCUS}`}
     >
       <div className="h-1.5 w-full overflow-hidden rounded-full bg-line">
-        <div className="h-full rounded-full bg-accent transition-[width] duration-300 ease-out motion-reduce:transition-none" style={{ width: `${percent}%` }} />
+        <div
+          className="h-full rounded-full bg-accent transition-[width] duration-300 ease-out motion-reduce:transition-none"
+          style={{ width: `${percent}%` }}
+        />
       </div>
     </div>
   );
@@ -64,8 +67,7 @@ export function ReplayBar({ replay }: { replay: Replay }) {
   useEffect(() => playRef.current?.focus({ preventScroll: true }), []);
 
   return (
-    <div
-      role="region"
+    <section
       aria-label="Replay controls"
       className="fixed inset-x-0 bottom-0 z-10 border-t border-line bg-surface/95 shadow-sm backdrop-blur transition-[translate] duration-300 ease-out motion-safe:starting:translate-y-full"
     >
@@ -107,6 +109,7 @@ export function ReplayBar({ replay }: { replay: Replay }) {
 
         <div role="radiogroup" aria-label="Speed" className="hidden h-11 shrink-0 rounded-md border border-line p-0.5 md:flex">
           {SPEEDS.map((s) => (
+            // biome-ignore lint/a11y/useSemanticElements: a segmented control; the radiogroup pattern keeps button styling and focus.
             <button
               key={s}
               type="button"
@@ -136,6 +139,6 @@ export function ReplayBar({ replay }: { replay: Replay }) {
           Exit
         </button>
       </div>
-    </div>
+    </section>
   );
 }

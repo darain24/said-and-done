@@ -42,7 +42,11 @@ export class TooFewChaptersError extends Error {}
  * are noise in a chapter list. Cut to 60 characters at a word boundary.
  */
 export function chapterTitle(subject: string): string {
-  const title = subject.replace(/^[A-Z]+-\d+(?:\s*[,–-]\s*[A-Z]+-\d+)*\s*:\s*/, "").replace(/\s+/g, " ").trim() || subject.trim();
+  const title =
+    subject
+      .replace(/^[A-Z]+-\d+(?:\s*[,–-]\s*[A-Z]+-\d+)*\s*:\s*/, "")
+      .replace(/\s+/g, " ")
+      .trim() || subject.trim();
   if (title.length <= MAX_TITLE) return title;
   const cut = title.slice(0, MAX_TITLE - 1);
   const space = cut.lastIndexOf(" ");

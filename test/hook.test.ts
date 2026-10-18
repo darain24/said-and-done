@@ -3,7 +3,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 import { EXIT, run } from "../src/cli.js";
-import { addHook, hook, HOOK_COMMAND, lineDiff, recordPrompt, removeHook } from "../src/commands/hook.js";
+import { addHook, HOOK_COMMAND, hook, lineDiff, recordPrompt, removeHook } from "../src/commands/hook.js";
 import { capture } from "./helpers/cli.js";
 import { makeTempRepo } from "./helpers/git-repo.js";
 
@@ -71,7 +71,13 @@ test("FR-34: hook install creates the settings file and prints what it added", a
 
   assert.deepEqual(JSON.parse(read()), { hooks: { UserPromptSubmit: [OURS] } });
   assert.equal(c.out[0], "Created .claude/settings.json:");
-  assert.ok(c.out.slice(1).filter((l) => l.startsWith("  ")).every((l) => l.startsWith("  + ")), "every line is an addition");
+  assert.ok(
+    c.out
+      .slice(1)
+      .filter((l) => l.startsWith("  "))
+      .every((l) => l.startsWith("  + ")),
+    "every line is an addition",
+  );
   assert.ok(c.out.includes(`  +             "command": "${HOOK_COMMAND}"`));
 });
 
@@ -120,7 +126,10 @@ test("FR-34: record appends the prompt to a git-ignored ledger and prints nothin
   assert.equal(await hook(["record"], c.io, async () => event("Now add tests")), EXIT.ok);
   assert.deepEqual(c.out, [], "stdout would be added to the prompt");
 
-  const ledger = readFileSync(join(root, ".said", "ledger.jsonl"), "utf8").trim().split("\n").map((l) => JSON.parse(l));
+  const ledger = readFileSync(join(root, ".said", "ledger.jsonl"), "utf8")
+    .trim()
+    .split("\n")
+    .map((l) => JSON.parse(l));
   assert.deepEqual(ledger[0], { at: "2026-10-04T10:00:00.000Z", sessionId: "s-1", text: "Add a CLI" });
   assert.equal(ledger[1].text, "Now add tests");
   assert.equal(readFileSync(join(root, ".said", ".gitignore"), "utf8"), "*\n");
