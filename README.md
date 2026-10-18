@@ -1,6 +1,7 @@
 # Said & Done
 
 [![built by voice: 19 prompts](docs/said-badge.svg)](#built-by-voice)
+[![CI](https://github.com/darain24/said-and-done/actions/workflows/ci.yml/badge.svg)](https://github.com/darain24/said-and-done/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-5B4BC4.svg)](LICENSE)
 
 **See the prompt behind every line of code.**
@@ -23,7 +24,7 @@ Where it's going (agent adapters, `said blame`, provenance in git notes, a GitHu
 
 ## Quick start
 
-Needs Node 22+, git, and a repo you've worked on with Claude Code. macOS and Linux are supported; Windows support is in progress.
+Needs Node 22+, git, and a repo you've worked on with Claude Code. macOS, Linux and Windows are supported (CI runs on all three).
 
 ```bash
 git clone https://github.com/darain24/said-and-done.git

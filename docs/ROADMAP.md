@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | Adopted Oct 18, 2026. Phase 0 done; Phase 1 done apart from the first npm publish and a green Windows CI run |
+| **Status** | Adopted Oct 18, 2026. Phase 0 done; Phase 1 done apart from the first npm publish |
 | **Owner** | darain24 |
 | **Starting point** | v0.1.0: the Wispr Flow contest build (19 commits, CLI + single-file Build Story page) |
 | **Goal** | A published, maintained open-source tool people actually install, with a UI worth screenshotting |
@@ -117,7 +117,7 @@ Two surfaces: the **Build Story page** (the product) and a **landing site** (the
 
 ### 5.3 Robustness
 
-- [~] **Windows support:** path normalisation, `C--Users-` redaction, LF line endings and test helpers done; confirmed once the Windows CI job is green.
+- [x] **Windows support:** path normalisation, `C--Users-` redaction, LF line endings; CI green on Windows × Node 22 and 24.
 - [x] `said doctor`: checks Node version, git, where sessions were found, adapter detection, and prints fixes.
 - [x] Config file `said.config.json` (title, sessions dir, excluded sessions, since/until, output paths) with a JSON schema. Redaction extras and adapters join it in later phases.
 - [ ] Custom redaction patterns and an allow-list in config.
