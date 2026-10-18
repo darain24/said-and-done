@@ -74,7 +74,7 @@ test("FR-22: --no-redact keeps the text and warns", async (t) => {
 
 test("§11: a missing template fails before writing anything", async (t) => {
   const { flags, out } = setup(t);
-  await assert.rejects(build([...flags, "--out", out], capture().io, [new URL("file:///nonexistent/t.html")]), TemplateError);
+  await assert.rejects(build([...flags, "--out", out], capture().io, [pathToFileURL(join(tmpdir(), "said-nonexistent", "t.html"))]), TemplateError);
   assert.throws(() => readFileSync(out));
 });
 

@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { test } from "node:test";
+import { pathToFileURL } from "node:url";
 import { injectStory, readTemplate, serializeStory, TemplateError } from "../src/render/inject.js";
 import type { Story } from "../src/story/model.js";
 
@@ -83,7 +86,7 @@ test("§9: a template without exactly one placeholder is refused", () => {
 });
 
 test("§11: a missing template says to run the build", async () => {
-  await assert.rejects(readTemplate([new URL("file:///nonexistent/story-template.html")]), (error: Error) => {
+  await assert.rejects(readTemplate([pathToFileURL(join(tmpdir(), "said-nonexistent", "t.html"))]), (error: Error) => {
     assert.ok(error instanceof TemplateError);
     assert.match(error.message, /npm run build/);
     return true;

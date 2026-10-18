@@ -27,7 +27,8 @@ Example:
   said hook install`;
 
 export const HOOK_COMMAND = "said hook record";
-export const SETTINGS_PATH = join(".claude", "settings.json");
+// "/" on every OS: it's shown in messages, and join() normalises it for file access.
+export const SETTINGS_PATH = ".claude/settings.json";
 export const LEDGER_DIR = ".said";
 const EVENT = "UserPromptSubmit";
 
