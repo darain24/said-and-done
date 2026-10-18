@@ -23,7 +23,7 @@ jobs:
           registry-url: https://registry.npmjs.org
       - run: npm ci
       # Opens a "Version packages" PR while changesets are pending; publishes when that PR is merged.
-      - uses: changesets/action@v1
+      - uses: changesets/action@v2
         with:
           publish: npm run release
           title: "Release: version packages"
